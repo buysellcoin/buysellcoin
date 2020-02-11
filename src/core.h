@@ -44,7 +44,7 @@ public:
 
     std::string ToString() const;
     std::string ToStringShort() const;
-
+    std::string hashToString() const;
 };
 
 /** An inpoint - a combination of a transaction and an index n into its vin */

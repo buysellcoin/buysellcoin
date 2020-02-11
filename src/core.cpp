@@ -16,6 +16,11 @@ std::string COutPoint::ToStringShort() const
     return strprintf("%s-%u", hash.ToString().substr(0,64), n);
 }
 
+std::string COutPoint::hashToString() const
+{
+    return strprintf("%s", hash.ToString());
+}
+
 CTxIn::CTxIn(COutPoint prevoutIn, CScript scriptSigIn, unsigned int nSequenceIn)
 {
     prevout = prevoutIn;

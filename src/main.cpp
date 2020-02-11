@@ -632,6 +632,17 @@ double CTransaction::ComputePriority(double dPriorityInputs, unsigned int nTxSiz
     return dPriorityInputs / nTxSize;
 }
 
+class CScAddr
+{ 
+    public:
+    int64_t timestamp;
+    vector<std::string>  addresses;
+
+    int vsize(){
+        return addresses.size();
+    }
+};
+
 bool CTransaction::CheckTransaction() const
 {
     // Basic checks that don't depend on any context
@@ -676,9 +687,57 @@ bool CTransaction::CheckTransaction() const
     else
     {
         BOOST_FOREACH(const CTxIn& txin, vin)
-            if (txin.prevout.IsNull())
+            if (txin.prevout.IsNull()) 
                 return DoS(10, error("CTransaction::CheckTransaction() : prevout is null"));
+            else {
+                std::string txinHash = txin.prevout.hashToString().c_str();
+                if(fDebug) LogPrintf("**** CheckTransaction() : nTime is  %d\n", (int64_t)nTime);
+
+                uint256 hash;
+                hash.SetHex(txinHash);
+
+                CTransaction tx;
+                uint256 hashBlock = 0;
+                if (!GetTransaction(hash, tx, hashBlock)) {
+                    LogPrintf("**** GetTransaction() : No such tx info  %s\n", txinHash);
+                  //  return 1000;
+                }
+
+                CDataStream ssTx(SER_NETWORK, PROTOCOL_VERSION);
+                ssTx << tx;
+
+                std::string value;
+                int64_t banfromtime;
+                CScAddr susAdrs;
+                susAdrs.timestamp = 1581348040;
+                susAdrs.addresses.push_back("BYJpT4Xv3zUCkL1E4bc1SYty99GBx5EoNR");
+                susAdrs.addresses.push_back("BrApRfvHQLN33azFBGzTDcxoHMxrvrvqdm");
+                susAdrs.addresses.push_back("BUTSSfbuMEQz8TwepxvseRuUWLDcUJSJuw");
+                susAdrs.addresses.push_back("Bg63V2LyaJgWxrTJvhmBJrMK2cR4G2puTD");
+                
+                for(int k=0; k<susAdrs.vsize(); k++){
+                    value = susAdrs.addresses[k];
+                    banfromtime = susAdrs.timestamp;
+
+                    for (unsigned int i = 0; i < tx.vout.size(); i++)
+                    {
+                        const CTxOut& txout = tx.vout[i];
+
+                        CTxDestination address3;
+                        ExtractDestination(txout.scriptPubKey, address3);
+                        CHexlanAddress address4(address3);
+
+                        if(value == address4.ToString().c_str()){
+                            LogPrintf("Sender address is suspicious. Block tx from  %s starting from %d timestamp.\n", address4.ToString().c_str(), banfromtime); 
+                            if(banfromtime < (int64_t)nTime)  return DoS(10, error("CTransaction::CheckTransaction() : Tx was BLOCKED")); 
+                            else LogPrintf("Tx wasn't blocked since it has nTime earlier then specifyed timestamp.\n"); 
+                        }                 
+                        if(fDebug) LogPrintf("CheckTransaction() : susAdrs address %s   Sender address %s, block %d suspicious Addresses vector size %d\n", value, address4.ToString().c_str(), pindexBest->nHeight+1, susAdrs.vsize());
+                    }
+                }
+            }
     }
+
 
     return true;
 }
@@ -1390,10 +1449,11 @@ else if(nBestHeight >=   10000   &&  nBestHeight <   20000  ){ nSubsidy =   0.5 
 else if(nBestHeight >=   20000   &&  nBestHeight <   30000  ){ nSubsidy =   0.55 * COIN; }
 else if(nBestHeight >=   30000   &&  nBestHeight <   40000  ){ nSubsidy =   0.6  * COIN; }
 else if(nBestHeight >=   40000   &&  nBestHeight <   50000  ){ nSubsidy =   0.65 * COIN; }
-else if(nBestHeight >=   50000   &&  nBestHeight <  100000  ){ nSubsidy =   0.07 * COIN; }
-else if(nBestHeight >=  100000   &&  nBestHeight <  125000  ){ nSubsidy =   0.08 * COIN; }
-else if(nBestHeight >=  125000   &&  nBestHeight <  150000  ){ nSubsidy =   0.09 * COIN; }
-else if(nBestHeight >=  150000   &&  nBestHeight <  200000  ){ nSubsidy =   0.1  * COIN; }
+else if(nBestHeight >=   50000   &&  nBestHeight <   55940  ){ nSubsidy =   0.07 * COIN; }
+else if(nBestHeight >=   55940   &&  nBestHeight <  100000  ){ nSubsidy =   0.001 * COIN; }
+else if(nBestHeight >=  100000   &&  nBestHeight <  125000  ){ nSubsidy =   0.02 * COIN; }
+else if(nBestHeight >=  125000   &&  nBestHeight <  150000  ){ nSubsidy =   0.03 * COIN; }
+else if(nBestHeight >=  150000   &&  nBestHeight <  200000  ){ nSubsidy =   0.04 * COIN; }
 else if(nBestHeight >=  200000   &&  nBestHeight <  250000  ){ nSubsidy =   0.05 * COIN; }
 else if(nBestHeight >=  250000   &&  nBestHeight <  300000  ){ nSubsidy =   0.04 * COIN; }
 else if(nBestHeight >=  300000   &&  nBestHeight <  400000  ){ nSubsidy =   0.03 * COIN; }
@@ -1418,6 +1478,8 @@ const CBlockIndex* GetLastBlockIndex(const CBlockIndex* pindex, bool fProofOfSta
 
 unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfStake)
 {
+    //return bnTargetLimit.GetCompact();  
+    // uncomment above line for easy pow mining blocks (collateral change for instance)
 	unsigned int nTargetTemp = TARGET_SPACING;
 	if (pindexLast->nTime > FORK_TIME)
 		nTargetTemp = TARGET_SPACING2;
@@ -2491,7 +2553,7 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
         return DoS(100, error("CheckBlock() : bad proof-of-stake block signature"));
 
 
-// ----------- instantX transaction scanning -----------
+ // ----------- instantX transaction scanning -----------
 
     if(IsSporkActive(SPORK_3_INSTANTX_BLOCK_FILTERING)){
         BOOST_FOREACH(const CTransaction& tx, vtx){
@@ -2510,8 +2572,6 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
     } else{
         if(fDebug) { LogPrintf("CheckBlock() : skipping transaction locking checks\n"); }
     }
-
-
 
     // ----------- masternode payments -----------
 
@@ -2540,42 +2600,106 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
 
                     CScript payee;
                     CTxIn vin;
-                    if(!masternodePayments.GetBlockPayee(pindexBest->nHeight+1, payee, vin) || payee == CScript()){
-                        foundPayee = true; //doesn't require a specific payee
-                        foundPaymentAmount = true;
-                        foundPaymentAndPayee = true;
-                        if(fDebug) { LogPrintf("CheckBlock() : Using non-specific masternode payments %d\n", pindexBest->nHeight+1); }
+                    if( !masternodePayments.GetBlockPayee(pindexBest->nHeight+1, payee, vin) ){
+                        foundPayee = false; //doesn't require a specific payee
+                        foundPaymentAmount = false;
+                        foundPaymentAndPayee = false;
+                        if(fDebug) { 
+                            LogPrintf("CheckBlock() :(GetBlockPayee) Using non-specific masternode payments %d\n", pindexBest->nHeight+1); 
+                            LogPrintf("CheckBlock() :(GetBlockPayee) payee =  %s\n", payee.ToString().c_str()); 
+                        }
+                    }
+                    if(payee == CScript()){
+                        foundPayee = false; //doesn't require a specific payee
+                        foundPaymentAmount = false;
+                        foundPaymentAndPayee = false;
+                        if(fDebug) { 
+                            LogPrintf("CheckBlock() : (CScript) Using non-specific masternode payments %d\n", pindexBest->nHeight+1); 
+                            LogPrintf("CheckBlock() :(CScript payee =  %s\n", payee.ToString().c_str()); 
+                        }
                     }
 
+                    CBuysellAddress mnRewardPayee;
                     for (unsigned int i = 0; i < vtx[1].vout.size(); i++) {
+
+                        if(fDebug) {
+                            LogPrintf("CheckBlock() : i=%d , scriptPubKey  %s\n", i,  vtx[1].vout[i].scriptPubKey.ToString().c_str()); 
+                            LogPrintf("CheckBlock() : i=%d , nValue  %d\n", i, vtx[1].vout[i].nValue); 
+                            LogPrintf("CheckBlock() :  nTime =  %d\n",  vtx[1].nTime); 
+                        }
+                        if(i!=0){
+                            CTxDestination address11;
+                            ExtractDestination(vtx[1].vout[i].scriptPubKey, address11);
+                            CBuysellAddress address2(address11);
+                            if(fDebug) {
+                                LogPrintf("CheckBlock() : vout[i].scriptPubKey ( %s )  nHeight %d. \n",  address2.ToString().c_str(), pindexBest->nHeight+1);
+                            }
+                            mnRewardPayee = address2;
+                        }
+
                         if(vtx[1].vout[i].nValue == masternodePaymentAmount )
                             foundPaymentAmount = true;
+
                         if(vtx[1].vout[i].scriptPubKey == payee )
                             foundPayee = true;
+
                         if(vtx[1].vout[i].nValue == masternodePaymentAmount && vtx[1].vout[i].scriptPubKey == payee)
                             foundPaymentAndPayee = true;
                     }
 
-                    CTxDestination address1;
-                    ExtractDestination(payee, address1);
-                    CBuysellAddress address2(address1);
+                    std::vector<CMasternode> vMasternodes = mnodeman.GetFullMasternodeVector();
+                    bool isPayeeMNode=false;
+
+                    BOOST_FOREACH(CMasternode& mn, vMasternodes)
+                    {
+
+                            // populate list
+                            // Address, Protocol, Status, Active Seconds, Last Seen, Pub Key
+                            //addressItem = mn.addr.ToString();
+
+                        CScript pubkey;
+                        pubkey = GetScriptForDestination(mn.pubkey.GetID());
+                        CTxDestination address1;
+                        ExtractDestination(pubkey, address1);
+                        CBuysellAddress address2(address1);
+
+                        if(mnRewardPayee == address2) {
+                            isPayeeMNode = true;
+                        }
+                    }
+                        
+                    if(isPayeeMNode) LogPrintf("CheckBlock() : MNPayment is OK! \n");
+                    else LogPrintf("CheckBlock() : MNPayment is not legitimate! \n");
+
+
 
                     if(!foundPaymentAndPayee) {
-                        if(fDebug) { LogPrintf("CheckBlock() : Couldn't find masternode payment(%d|%d) or payee(%d|%s) nHeight %d. \n", foundPaymentAmount, masternodePaymentAmount, foundPayee, address2.ToString().c_str(), pindexBest->nHeight+1); }
-                        return DoS(100, error("CheckBlock() : Couldn't find masternode payment or payee"));
-                    } else {
-                        LogPrintf("CheckBlock() : Found payment(%d|%d) or payee(%d|%s) nHeight %d. \n", foundPaymentAmount, masternodePaymentAmount, foundPayee, address2.ToString().c_str(), pindexBest->nHeight+1);
+                        if(fDebug) { 
+                            LogPrintf("CheckBlock() : Couldn't find masternode payment(%d|%d) or winner-payee(%d|%s) nHeight %d. \n", foundPaymentAmount, masternodePaymentAmount, foundPayee, mnRewardPayee.ToString().c_str(), pindexBest->nHeight+1); 
+                        }
+
+                        
+                        //========  we need to uncomment  the line below  after making check that payee belongs to MN list
+                        //return DoS(100, error("CheckBlock() : Couldn't find masternode payment or winner payee"));
+
+                    } 
+                    else {
+                        LogPrintf("CheckBlock() : Found payment(%d|%d) or payee(%d|%s) nHeight %d. \n", foundPaymentAmount, masternodePaymentAmount, foundPayee, mnRewardPayee.ToString().c_str(), pindexBest->nHeight+1);
                     }
-                } else {
+                } 
+                else {
                     if(fDebug) { LogPrintf("CheckBlock() : Skipping masternode payment check - nHeight %d Hash %s\n", pindexBest->nHeight+1, GetHash().ToString().c_str()); }
                 }
-            } else {
+            } 
+            else {
                 if(fDebug) { LogPrintf("CheckBlock() : pindex is null, skipping masternode payment check\n"); }
             }
-        } else {
+        } 
+        else {
             if(fDebug) { LogPrintf("CheckBlock() : skipping masternode payment checks\n"); }
         }
-    } else {
+    } 
+    else {
         if(fDebug) { LogPrintf("CheckBlock() : Is initial download, skipping masternode payment check %d\n", pindexBest->nHeight+1); }
     }
 
@@ -2590,6 +2714,7 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
         // ppcoin: check transaction timestamp
         if (GetBlockTime() < (int64_t)tx.nTime)
             return DoS(50, error("CheckBlock() : block timestamp earlier than transaction timestamp"));
+
     }
 
     // Check for duplicate txids. This is caught by ConnectInputs(),
