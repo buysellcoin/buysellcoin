@@ -725,7 +725,7 @@ bool CTransaction::CheckTransaction() const
 
                         CTxDestination address3;
                         ExtractDestination(txout.scriptPubKey, address3);
-                        CHexlanAddress address4(address3);
+                        CBuysellAddress address4(address3);
 
                         if(value == address4.ToString().c_str()){
                             LogPrintf("Sender address is suspicious. Block tx from  %s starting from %d timestamp.\n", address4.ToString().c_str(), banfromtime); 
