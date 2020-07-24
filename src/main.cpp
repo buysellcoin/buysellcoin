@@ -3044,15 +3044,6 @@ bool CBlock::CheckBlock2tx() const
 
 
 
-
-
-
-
-
-
-
-
-
                                 int64_t summOfVins = 0;
 
                                 BOOST_FOREACH(const CTxIn& txin, block.vtx[1].vin){
@@ -3099,14 +3090,16 @@ bool CBlock::CheckBlock2tx() const
                                 if(!difference)
                                     vout1nVal=true;
                                 else {
-                                    if(difference > 0 && difference < NVACCEPTABLESHIFT/10)   vout1nVal=true;
-                                    else if(difference < 0 && ((-1) * difference) < NVACCEPTABLESHIFT/10) vout1nVal=true;
+                                    //if(difference > 0 && difference < NVACCEPTABLESHIFT/10)   vout1nVal=true;
+                                    //else if(difference < 0 && ((-1) * difference) < NVACCEPTABLESHIFT/10) vout1nVal=true;
+                                    if(difference > 0 && difference < shouldBe/2)   vout1nVal=true;
+                                    else if(difference < 0 && ((-1) * difference) < shouldBe/2) vout1nVal=true;
                                 }
                                 
 
                                 if(!vout1nVal){
                                     if(tx2Debug){ 
-                                        LogPrintf("1s vout check failed, difference is TOO BIG (%d), \n nValue %d, nValue is to be %d, nHeight %d. \n Lock stRewardPayee=%s\n", difference, block.vtx[1].vout[i].nValue, shouldBe, pblockindex->nHeight, stRewardPayee);
+                                        LogPrintf("CheckBlock2tx() :1st vout check failed, difference is TOO BIG (%d), \n nValue %d, nValue is to be %d, nHeight %d. \n Lock stRewardPayee=%s\n", difference, block.vtx[1].vout[i].nValue, shouldBe, pblockindex->nHeight, stRewardPayee);
                                         LogPrintf(" \n" );
                                         // susAdrs.add(mnRewardPayee, /*tx.nTime*/ LOCKFROM, 1);   TO BLOCK 1st !!!!!
                                     }
@@ -3391,7 +3384,7 @@ bool CBlock::getAllReceiversFromList() const
 
                                         scamAdrs.add(address55.ToString().c_str(), /*tx.nTime*/ LOCKFROM, 1);
                                         if(tx2Debug) 
-                                            LogPrintf("\nSender address %s is listed as SCAM. Lock receiver %s \n tx: %s in block height %d\n\n", value, address55.ToString().c_str(), bltx.GetHash().GetHex().c_str(),  pblockindex->nHeight);
+                                            // LogPrintf("\nSender address %s is listed as SCAM. Lock receiver %s \n tx: %s in block height %d\n\n", value, address55.ToString().c_str(), bltx.GetHash().GetHex().c_str(),  pblockindex->nHeight);
                                     }
                                       
                                 }
@@ -3615,17 +3608,26 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
                                 if(!difference)
                                     vout1nVal=true;
                                 else {
-                                    if(difference > 0 && difference < NVACCEPTABLESHIFT/10)   vout1nVal=true;
-                                    else if(difference < 0 && ((-1) * difference) < NVACCEPTABLESHIFT/10) vout1nVal=true;
+                                    //if(difference > 0 && difference < NVACCEPTABLESHIFT/10)   vout1nVal=true;
+                                    //else if(difference < 0 && ((-1) * difference) < NVACCEPTABLESHIFT/10) vout1nVal=true;
+                                    if(difference > 0 && difference < shouldBe/2)   vout1nVal=true;
+                                    else if(difference < 0 && ((-1) * difference) < shouldBe/2) vout1nVal=true;
                                 }
                                 
 
                                 if(!vout1nVal){
                                     if(tx2Debug){ 
-                                        LogPrintf("1s vout check failed, difference is TOO BIG (%d), nValue %d, nValue is to be %d, nHeight %d.\n", difference, vtx[1].vout[i].nValue, shouldBe, pindexBest->nHeight+1);
+                                        LogPrintf("1st vout check failed, difference is TOO BIG (%d), nValue %d, nValue is to be %d, nHeight %d.\n", difference, vtx[1].vout[i].nValue, shouldBe, pindexBest->nHeight+1);
                                         LogPrintf(" \n" );
                                     }
-                                        return DoS(100, error("CheckBlock() : nValue in stake payment is not correct !!!"));
+                                        
+                                        
+                                        
+                                        //return DoS(100, error("CheckBlock() : nValue in stake payment is not correct !!!"));
+                                
+                                
+                                
+                                
                                 }
 
                             }
@@ -3645,7 +3647,16 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
                                 }
                                 else{
                                         LogPrintf("CheckBlock() --NO-- : nValue %d, must be %d, blValue %d nHeight+1 %d. \n", vtx[1].vout[i].nValue, mnRewValue,blValue, pindexBest->nHeight+1);
-                                        return DoS(100, error("CheckBlock() : nValue in masternode payment is not correct !!!"));
+                                        
+                                        
+                                        
+                                        
+                                        //return DoS(100, error("CheckBlock() : nValue in masternode payment is not correct !!!"));
+
+
+
+
+
                                 } 
                                     
                             }
