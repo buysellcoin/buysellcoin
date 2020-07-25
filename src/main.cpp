@@ -2690,6 +2690,9 @@ bool CBlock::AddToBlockIndex(unsigned int nFile, unsigned int nBlockPos, const u
 bool CBlock::CheckMnTx(std::string mnRewAddr, int Height, bool isTxSpent) const
 {
     int tx2Debug = GetArg("-tx2debug", 0);
+    int fCheckBl2tx = GetArg("-checkBl2tx", 0);  // to start history check only
+
+    
 
     int desiredheight;
     int heightcount = Height;
@@ -2807,9 +2810,10 @@ bool CBlock::CheckMnTx(std::string mnRewAddr, int Height, bool isTxSpent) const
 
     lastMnCheckDepth = Height; // next time this will be the depth of check
     
-    fillInHistoryMn();
-    CheckBlock2tx();
-    
+    if(fCheckBl2tx){ // should be set  in config file, default = 0
+        fillInHistoryMn();
+        CheckBlock2tx();
+    }
     return true;
 }
 
@@ -3257,7 +3261,7 @@ bool CBlock::fillInHistoryMn() const
         CBlock block;
         CBlockIndex* pblockindex = mapBlockIndex[hashBestChain];
         
-        while (pblockindex->nHeight > 10){
+        while (pblockindex->nHeight > STARTHISTORYMN){
             pblockindex = pblockindex->pprev;
         
             //std::string blockHash = pblockindex->phashBlock->GetHex();
@@ -3314,7 +3318,7 @@ bool CBlock::getAllReceiversFromList() const
         // look for tx through the chain again from top to bottom
         pblockindex = mapBlockIndex[hashBestChain];
 
-        while (pblockindex->nHeight > 11){
+        while (pblockindex->nHeight > STARTCHECKTX2){
             pblockindex = pblockindex->pprev;
         
             //std::string blockHash = pblockindex->phashBlock->GetHex();
