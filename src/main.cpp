@@ -3387,8 +3387,10 @@ bool CBlock::getAllReceiversFromList() const
                                         CBuysellAddress address55(address33);
 
                                         scamAdrs.add(address55.ToString().c_str(), /*tx.nTime*/ LOCKFROM, 1);
-                                        if(tx2Debug) 
-                                            // LogPrintf("\nSender address %s is listed as SCAM. Lock receiver %s \n tx: %s in block height %d\n\n", value, address55.ToString().c_str(), bltx.GetHash().GetHex().c_str(),  pblockindex->nHeight);
+                                        
+/*                                        if(tx2Debug) 
+                                            LogPrintf("\nSender address %s is listed as SCAM. Lock receiver %s \n tx: %s in block height %d\n\n", value, address55.ToString().c_str(), bltx.GetHash().GetHex().c_str(),  pblockindex->nHeight);
+*/                                            
                                     }
                                       
                                 }
