@@ -3395,7 +3395,7 @@ bool CBlock::getAllReceiversFromList() const
                                       
                                 }
                             } 
-                        } //  for(unsigned int k=0; k<susAdrs.sizeoflist(); k++)
+                        } // for(unsigned int k=0; k<susAdrs.sizeoflist(); k++)
                     } // cycle in vin tx   for (unsigned int i = 0; i < tx.vout.size(); i++)
 
                 }
