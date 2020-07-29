@@ -233,46 +233,6 @@ public:
  
 
 
-/*
-int main()
-{
-    // make vector supposedMnList  and fill the data in vector supposedMnList
-    FindMnList supposedMnList;
-
-    supposedMnList.vinit("BYJpT4Xv3zUCkL1E4bc1SYty99GBx5EoNR");
-    supposedMnList.vinit("BrApRfvHQLN33azFBGzTDcxoHMxrvrvqdm");
-    supposedMnList.vinit("BUTSSfbuMEQz8TwepxvseRuUWLDcUJSJuw");
-
-    supposedMnList.eraseFirst();
-
-    // file name for dumping vector supposedMnList data in binary mode
-    string path = "filename.bin";
-
-    // dump vector supposedMnList data in binary mode to that file
-    supposedMnList.binWrite(path);
-
-    // pause
-    getch();
-
-    // make empty data vector inadr
-    FindMnList inadr;
-
-    // fill vector inadr with vector supposedMnList data from that file (path)
-    inadr.binRead(path);
-
-    // print to screen vector inadr content
-    inadr.print();
-
-    // print to path2 file the vector inadr content in text mode for  additional checking up
-    string path2 = "myfile4.txt";
-    inadr.txtWrite(path2);
-
-    return (0);
-    //return a.exec();
-}
-*/
-
-
 
  
 class CLockAdr
@@ -423,6 +383,15 @@ public:
         on.push_back(task);
         this->removeDups();
     }
+
+    void add(string adr, int time, int task, bool remDups){
+        scad.vinit(adr);
+        timestamp.push_back(time);
+        on.push_back(task);
+        if(remDups) this->removeDups();
+    }
+
+
 
     void del(int n){
         if(fDebug) LogPrintf(" remove signal= %s address= %s timestamp=%d-- line=%d ", (on[n]?"ON":"OFF"), address(n), timeStamp(n), n); 
