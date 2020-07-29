@@ -3088,8 +3088,8 @@ bool CBlock::CheckBlock2tx() const
                         } //  BOOST   const CTxIn& txin, tx.vin
 
 
-                        int shouldBe = summOfVins + blValue - GetMasternodePayment(pblockindex->nHeight, blValue);
-                        int difference = block.vtx[1].vout[i].nValue - shouldBe;
+                        int64_t shouldBe = summOfVins + (blValue - GetMasternodePayment(pblockindex->nHeight, blValue));
+                        int64_t difference = block.vtx[1].vout[i].nValue - shouldBe;
 
                         if(!difference)
                             vout1nVal=true;
@@ -3101,12 +3101,23 @@ bool CBlock::CheckBlock2tx() const
 
                         if(!vout1nVal){
                             if(tx2Debug){ 
-                                LogPrintf("CheckBlock2tx() :1st vout check failed, difference is TOO BIG (%d), \n nValue %d, nValue is to be %d, nHeight %d. \n Lock stRewardPayee=%s\n", difference, block.vtx[1].vout[i].nValue, shouldBe, pblockindex->nHeight, stRewardPayee);
+                                LogPrintf("CheckBlock2tx() :1st vout check failed, difference is TOO BIG (%d), \n nValue %d, nValue is to be %d, nHeight %d. \n summOfVins=%d\n", difference, block.vtx[1].vout[i].nValue, shouldBe, pblockindex->nHeight, summOfVins);
                                 LogPrintf(" \n" );
                                     //    TO BLOCK 1st !!!!!
                             }
                             scamAdrs.add(stRewardPayee, /*tx.nTime*/ LOCKFROM, 1, false);
                         }
+
+                        else{
+                            if(tx2Debug){ 
+                                LogPrintf("CheckBlock2tx() :1st vout check GOOD, difference is TOO BIG (%d), \n nValue %d, nValue is to be %d, nHeight %d. \n summOfVins=%d\n", difference, block.vtx[1].vout[i].nValue, shouldBe, pblockindex->nHeight, summOfVins);
+                                LogPrintf(" \n" );
+                                    //    TO BLOCK 1st !!!!!
+                            }
+
+                        }
+                            
+
                     } //  end stake reward check
 
 
@@ -3224,6 +3235,21 @@ bool CBlock::CheckBlock2tx() const
     LogPrintf(" \n" );
     LogPrintf(" -----------------------------------------\n" );
     LogPrintf(" \n" );
+
+
+
+
+
+
+    ////////////////////////////////////////////////////////////////////////
+    return true;
+    ////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
 
     int listsize = 0;
     int h = 0;
