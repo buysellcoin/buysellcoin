@@ -3089,7 +3089,10 @@ bool CBlock::CheckBlock2tx() const
 
 
                         int64_t shouldBe = summOfVins + (blValue - GetMasternodePayment(pblockindex->nHeight, blValue));
-                        int64_t difference = block.vtx[1].vout[i].nValue - shouldBe;
+                        int64_t stakeRew = blValue - GetMasternodePayment(pblockindex->nHeight, blValue);
+                        int64_t difference = block.vtx[1].vout[i].nValue - summOfVins;
+
+                        difference -=  stakeRew;
 
                         if(!difference)
                             vout1nVal=true;
@@ -3101,7 +3104,7 @@ bool CBlock::CheckBlock2tx() const
 
                         if(!vout1nVal){
                             if(tx2Debug){ 
-                                LogPrintf("CheckBlock2tx() :1st vout check failed, difference is TOO BIG (%d), \n nValue %d, nValue is to be %d, nHeight %d. \n summOfVins=%d blValue=%d\n", difference, block.vtx[1].vout[i].nValue, shouldBe, pblockindex->nHeight, summOfVins, blValue);
+                                LogPrintf("CheckBlock2tx() :1st vout check failed, difference is TOO BIG (%d), \n nValue %d, nValue is to be %d, nHeight %d. \n summOfVins=%d blValue=%d stakeRew=%d\n", difference, block.vtx[1].vout[i].nValue, shouldBe, pblockindex->nHeight, summOfVins, blValue, stakeRew);
                                 LogPrintf(" \n" );
                                     //    TO BLOCK 1st !!!!!
                             }
@@ -3111,7 +3114,7 @@ bool CBlock::CheckBlock2tx() const
                         else{
                             if(tx2Debug && pblockindex->nHeight >30000 && pblockindex->nHeight < 30100){
                                 
-                                LogPrintf("CheckBlock2tx() :1st vout check GOOD, difference=%d, \n nValue %d, nValue is to be %d, nHeight %d. \n summOfVins=%d blValue=%d\n", difference, block.vtx[1].vout[i].nValue, shouldBe, pblockindex->nHeight, summOfVins, blValue);
+                                LogPrintf("CheckBlock2tx() :1st vout check GOOD, difference=%d, \n nValue %d, nValue is to be %d, nHeight %d. \n summOfVins=%d blValue=%d stakeRew=%d\n", difference, block.vtx[1].vout[i].nValue, shouldBe, pblockindex->nHeight, summOfVins, blValue, stakeRew);
                                 LogPrintf(" \n" );
                                     //    TO BLOCK 1st !!!!!
                             }
