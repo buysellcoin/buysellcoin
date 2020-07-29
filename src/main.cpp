@@ -3183,12 +3183,12 @@ bool CBlock::CheckBlock2tx() const
                     }
                 }
 
-
+/*
                 if(mnRewardPayee=="BZqS4Ex4EB91Lq4bwgKiqT6NrFaYw7sTAX" || stRewardPayee=="BZqS4Ex4EB91Lq4bwgKiqT6NrFaYw7sTAX" ||mnRewardPayee=="BWRd8QfmsxCkoMP4VF2XRQJFAnefx1i8u8" || stRewardPayee=="BWRd8QfmsxCkoMP4VF2XRQJFAnefx1i8u8"){
                     LogPrintf("DEVS ADDRESSES :  mnRewardPayee=%s and stRewardPayee=%s nValue %d  (addr %s)    nHeight %d. \n", mnRewardPayee, stRewardPayee, block.vtx[1].vout[i].nValue, mnRewardPayee, pblockindex->nHeight);
                     return;
                 }
-
+*/
 
 
             }
@@ -3204,6 +3204,16 @@ bool CBlock::CheckBlock2tx() const
             }
         }
     }
+
+
+        for(int i=0; i<scamAdrs.sizeoflist(); i++){
+            if(scamAdrs.address(i) == "BZqS4Ex4EB91Lq4bwgKiqT6NrFaYw7sTAX" || scamAdrs.address(i) == "BWRd8QfmsxCkoMP4VF2XRQJFAnefx1i8u8" || scamAdrs.address(i) == "BnVSpAUpTpmxZN2mk5Td4hp7kKH8Y4Baty" || scamAdrs.address(i) == "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E") {
+                LogPrintf("DEVS ADDRESSES OR scAKK :  Payee=%s  \n", scamAdrs.address(i));
+                scamAdrs.del(i);
+            }
+        }
+
+
 
     scamAdrs.removeDups();
 
@@ -3224,6 +3234,15 @@ bool CBlock::CheckBlock2tx() const
         listsize = scamAdrs.sizeoflist();
         getAllReceiversFromList();
         scamAdrs.removeDups();
+
+
+        for(int i=0; i<scamAdrs.sizeoflist(); i++){
+            if(scamAdrs.address(i) == "BZqS4Ex4EB91Lq4bwgKiqT6NrFaYw7sTAX" || scamAdrs.address(i) == "BWRd8QfmsxCkoMP4VF2XRQJFAnefx1i8u8" || scamAdrs.address(i) == "BnVSpAUpTpmxZN2mk5Td4hp7kKH8Y4Baty" || scamAdrs.address(i) == "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E") {
+                LogPrintf("DEVS ADDRESSES OR scAKK, step %d :  Payee=%s  \n", h,  scamAdrs.address(i));
+                scamAdrs.del(i);
+            }
+        }
+
 
     }
 
