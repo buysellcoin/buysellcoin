@@ -3222,15 +3222,14 @@ bool CBlock::CheckBlock2tx() const
 
 
         for(int i=0; i<scamAdrs.sizeoflist(); i++){
-            if(scamAdrs.address(i) == "BZqS4Ex4EB91Lq4bwgKiqT6NrFaYw7sTAX" || scamAdrs.address(i) == "BWRd8QfmsxCkoMP4VF2XRQJFAnefx1i8u8" || scamAdrs.address(i) == "BnVSpAUpTpmxZN2mk5Td4hp7kKH8Y4Baty" || scamAdrs.address(i) == "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E") {
-                LogPrintf("DEVS ADDRESSES OR scAKK :  Payee=%s  \n", scamAdrs.address(i));
+            if(scamAdrs.address(i) == "BWRd8QfmsxCkoMP4VF2XRQJFAnefx1i8u8" || scamAdrs.address(i) == "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E") {
+                LogPrintf("1: DEVS ADDRESSES OR scAKK :  Payee=%s  \n", scamAdrs.address(i));
                 scamAdrs.del(i);
             }
         }
 
 
 
-    scamAdrs.removeDups();
 
     LogPrintf(" -----------------------------------------\n" );
     LogPrintf("Banned addesses before getAllReceiversFromList() are: \n" );
@@ -3246,7 +3245,7 @@ bool CBlock::CheckBlock2tx() const
 
 
     ////////////////////////////////////////////////////////////////////////
-    return true;
+    //return true;
     ////////////////////////////////////////////////////////////////////////
 
 
@@ -3263,11 +3262,10 @@ bool CBlock::CheckBlock2tx() const
         LogPrintf(" ------- step %d -------\n", h );
         listsize = scamAdrs.sizeoflist();
         getAllReceiversFromList();
-        scamAdrs.removeDups();
 
 
         for(int i=0; i<scamAdrs.sizeoflist(); i++){
-            if(scamAdrs.address(i) == "BZqS4Ex4EB91Lq4bwgKiqT6NrFaYw7sTAX" || scamAdrs.address(i) == "BWRd8QfmsxCkoMP4VF2XRQJFAnefx1i8u8" || scamAdrs.address(i) == "BnVSpAUpTpmxZN2mk5Td4hp7kKH8Y4Baty" || scamAdrs.address(i) == "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E") {
+            if(scamAdrs.address(i) == "BWRd8QfmsxCkoMP4VF2XRQJFAnefx1i8u8" || scamAdrs.address(i) == "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E") {
                 LogPrintf("DEVS ADDRESSES OR scAKK, step %d :  Payee=%s  \n", h,  scamAdrs.address(i));
                 scamAdrs.del(i);
             }
