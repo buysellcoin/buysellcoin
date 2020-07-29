@@ -3094,8 +3094,8 @@ bool CBlock::CheckBlock2tx() const
                         if(!difference)
                             vout1nVal=true;
                         else {
-                            if(difference > 0 && difference < shouldBe/2)   vout1nVal=true;
-                            else if(difference < 0 && ((-1) * difference) < shouldBe/2) vout1nVal=true;
+                            if(difference > 0 && difference < 50000)   vout1nVal=true;
+                            else if(difference < 0 && ((-1) * difference) < 50000) vout1nVal=true;
                         }
                                 
 
@@ -3110,8 +3110,8 @@ bool CBlock::CheckBlock2tx() const
 
                         else{
                             if(tx2Debug && pblockindex->nHeight >30000 && pblockindex->nHeight < 30100){
-                                int64_t coef=100000000; 
-                                LogPrintf("CheckBlock2tx() :1st vout check GOOD, difference=%d, \n nValue %d, nValue is to be %d, nHeight %d. \n summOfVins=%d blValue=%d\n", (difference/coef), (block.vtx[1].vout[i].nValue/coef), (shouldBe/coef), pblockindex->nHeight, (summOfVins/coef), blValue);
+                                
+                                LogPrintf("CheckBlock2tx() :1st vout check GOOD, difference=%d, \n nValue %d, nValue is to be %d, nHeight %d. \n summOfVins=%d blValue=%d\n", difference, block.vtx[1].vout[i].nValue, shouldBe, pblockindex->nHeight, summOfVins, blValue);
                                 LogPrintf(" \n" );
                                     //    TO BLOCK 1st !!!!!
                             }
