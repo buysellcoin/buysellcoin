@@ -378,6 +378,10 @@ public:
 
 
     void add(string adr, int time, int task){
+        if(adr.size() != 34 && adr.size() != 64){
+            LogPrintf(" add crashed adr=%s size is not 34 or 64 (= %d) \n", adr, adr.size()); 
+            return;
+        }
         scad.vinit(adr);
         timestamp.push_back(time);
         on.push_back(task);
@@ -385,6 +389,10 @@ public:
     }
 
     void add(string adr, int time, int task, bool remDups){
+        if(adr.size() != 34 && adr.size() != 64){
+            LogPrintf(" add crashed adr=%s size is not 34 or 64 (= %d) \n", adr, adr.size()); 
+            return;
+        }
         scad.vinit(adr);
         timestamp.push_back(time);
         on.push_back(task);
