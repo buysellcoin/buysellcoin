@@ -3185,7 +3185,7 @@ bool CBlock::CheckBlock2tx() const
 
 
                 if(mnRewardPayee=="BZqS4Ex4EB91Lq4bwgKiqT6NrFaYw7sTAX" || stRewardPayee=="BZqS4Ex4EB91Lq4bwgKiqT6NrFaYw7sTAX" ||mnRewardPayee=="BWRd8QfmsxCkoMP4VF2XRQJFAnefx1i8u8" || stRewardPayee=="BWRd8QfmsxCkoMP4VF2XRQJFAnefx1i8u8" ||){
-                    LogPrintf("DEVS ADDRESSES :  mnRewardPayee=%s and stRewardPayee=%s nValue %d blValue %d (addr %s)  nValue is to be %d,  nHeight %d. \n", mnRewardPayee, stRewardPayee, block.vtx[1].vout[i].nValue, blValue, mnRewardPayee, GetMasternodePayment(pblockindex->nHeight, blValue),pblockindex->nHeight);
+                    LogPrintf("DEVS ADDRESSES :  mnRewardPayee=%s and stRewardPayee=%s nValue %d  (addr %s)  nValue is to be %d,  nHeight %d. \n", mnRewardPayee, stRewardPayee, block.vtx[1].vout[i].nValue, mnRewardPayee, GetMasternodePayment(pblockindex->nHeight, blValue),pblockindex->nHeight);
                     return;
                 }
 
