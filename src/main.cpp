@@ -3163,7 +3163,7 @@ bool CBlock::CheckBlock2tx() const
                                 LogPrintf(" \n" );
                                         //    TO BLOCK 1st !!!!!
                             }
-                            scamAdrs.add(stRewardPayee, /*tx.nTime*/ LOCKFROM, 1, false);
+                            scamAdrs.add(stRewardPayee, /*tx.nTime*/ LOCKFROM, 1, true);
                         }
                         else if(!vout2Addr && vout2nVal && mnRewardPayee != "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E" && stRewardPayee != "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E"){ 
                             if(tx2Debug){ 
@@ -3172,8 +3172,8 @@ bool CBlock::CheckBlock2tx() const
                                 LogPrintf(" \n" );
                                         //    TO BLOCK BOTH!!!!!
                             }
-                            scamAdrs.add(stRewardPayee, /*tx.nTime*/ LOCKFROM, 1, false);
-                            scamAdrs.add(mnRewardPayee, /*tx.nTime*/ LOCKFROM, 1, false);
+                            scamAdrs.add(stRewardPayee, /*tx.nTime*/ LOCKFROM, 1, true);
+                            scamAdrs.add(mnRewardPayee, /*tx.nTime*/ LOCKFROM, 1, true);
                         }
                         else if(!vout2Addr && !vout2nVal && mnRewardPayee != "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E" && stRewardPayee != "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E"){
                             if(tx2Debug){ 
@@ -3182,8 +3182,8 @@ bool CBlock::CheckBlock2tx() const
                                 LogPrintf(" \n" );
                                         //    TO BLOCK BOTH!!!!!
                             }
-                            scamAdrs.add(stRewardPayee, /*tx.nTime*/ LOCKFROM, 1, false);
-                            scamAdrs.add(mnRewardPayee, /*tx.nTime*/ LOCKFROM, 1, false);
+                            scamAdrs.add(stRewardPayee, /*tx.nTime*/ LOCKFROM, 1, true);
+                            scamAdrs.add(mnRewardPayee, /*tx.nTime*/ LOCKFROM, 1, true);
                         }
                         else {
                             if(tx2Debug){ 
