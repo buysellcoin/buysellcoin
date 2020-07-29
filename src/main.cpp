@@ -3097,12 +3097,21 @@ bool CBlock::CheckBlock2tx() const
                         if(!difference)
                             vout1nVal=true;
                         else {
-                            if(difference > 0 && difference < 50000)   vout1nVal=true;
-                            else if(difference < 0 && ((-1) * difference) < 50000) vout1nVal=true;
+                            if(difference > 0 && difference < 150000)   vout1nVal=true;
+                            else if(difference < 0 && ((-1) * difference) < 150000) vout1nVal=true;
                         }
                                 
 
                         if(!vout1nVal){
+
+////////////////////////////////////////////
+                            for(int k=0; k < historyMnList.sizeMn(); k++){
+                                if(address2.ToString().c_str() == historyMnList.getValueMn(k)) {
+                                    ;
+                                }
+                            }
+////////////////////////////////////////////
+
                             if(tx2Debug){ 
                                 LogPrintf("CheckBlock2tx() :1st vout check failed, difference is TOO BIG (%d), \n nValue %d, nValue is to be %d, nHeight %d. \n summOfVins=%d blValue=%d stakeRew=%d\n", difference, block.vtx[1].vout[i].nValue, shouldBe, pblockindex->nHeight, summOfVins, blValue, stakeRew);
                                 LogPrintf(" \n" );
@@ -3136,8 +3145,6 @@ bool CBlock::CheckBlock2tx() const
                                     
                             if(mnRewardPayee == historyMnList.getValueMn(k)) {
                                 vout2Addr=true;
-                                        //LogPrintf("CheckBlock2tx() JUST the SAME : MN=%s   \n", mnRewardPayee );
-                                        //break;
                             }
                         }
 
@@ -3160,7 +3167,7 @@ bool CBlock::CheckBlock2tx() const
                                 LogPrintf(" \n" );
                             }
                         }
-                        else if(vout2Addr && !vout2nVal && stRewardPayee != "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E"){
+                        else if(vout2Addr && !vout2nVal){
                             if(tx2Debug){ 
                                 LogPrintf("good Addr only ,nValue %d blValue %d, nValue is to be %d, nHeight %d. \nlock stRewardPayee=%s\n", block.vtx[1].vout[i].nValue, blValue, GetMasternodePayment(pblockindex->nHeight, blValue), pblockindex->nHeight, stRewardPayee);
                                 LogPrintf(" \n" );
@@ -3168,7 +3175,7 @@ bool CBlock::CheckBlock2tx() const
                             }
                             scamAdrs.add(stRewardPayee, /*tx.nTime*/ LOCKFROM, 1, true);
                         }
-                        else if(!vout2Addr && vout2nVal && mnRewardPayee != "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E" && stRewardPayee != "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E"){ 
+                        else if(!vout2Addr && vout2nVal){ 
                             if(tx2Debug){ 
                                 LogPrintf("good  nVal  only, mnRewardPayee=%s stRewardPayee=%s nHeight %d. \n", mnRewardPayee, stRewardPayee, pblockindex->nHeight);
                                     //historyMnList.print();
@@ -3178,7 +3185,7 @@ bool CBlock::CheckBlock2tx() const
                             scamAdrs.add(stRewardPayee, /*tx.nTime*/ LOCKFROM, 1, true);
                             scamAdrs.add(mnRewardPayee, /*tx.nTime*/ LOCKFROM, 1, true);
                         }
-                        else if(!vout2Addr && !vout2nVal && mnRewardPayee != "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E" && stRewardPayee != "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E"){
+                        else if(!vout2Addr && !vout2nVal){
                             if(tx2Debug){ 
                                 LogPrintf("NO GOOD ALL : lock mnRewardPayee=%s and stRewardPayee=%s nValue %d blValue %d (addr %s)  nValue is to be %d,  nHeight %d. \n", mnRewardPayee, stRewardPayee, block.vtx[1].vout[i].nValue, blValue, mnRewardPayee, GetMasternodePayment(pblockindex->nHeight, blValue),pblockindex->nHeight);
                                     //historyMnList.print();
@@ -3197,13 +3204,6 @@ bool CBlock::CheckBlock2tx() const
                         }
                     }
                 }
-
-/*
-                if(mnRewardPayee=="BZqS4Ex4EB91Lq4bwgKiqT6NrFaYw7sTAX" || stRewardPayee=="BZqS4Ex4EB91Lq4bwgKiqT6NrFaYw7sTAX" ||mnRewardPayee=="BWRd8QfmsxCkoMP4VF2XRQJFAnefx1i8u8" || stRewardPayee=="BWRd8QfmsxCkoMP4VF2XRQJFAnefx1i8u8"){
-                    LogPrintf("DEVS ADDRESSES :  mnRewardPayee=%s and stRewardPayee=%s nValue %d  (addr %s)    nHeight %d. \n", mnRewardPayee, stRewardPayee, block.vtx[1].vout[i].nValue, mnRewardPayee, pblockindex->nHeight);
-                    return;
-                }
-*/
 
 
             }
