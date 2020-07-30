@@ -3231,9 +3231,18 @@ bool CBlock::CheckBlock2tx() const
 
 
     LogPrintf(" -----------------------------------------\n" );
-    LogPrintf("Banned addesses before getAllReceiversFromList() are: \n" );
+    LogPrintf("Banned addesses before getAllReceiversFromList() are: \n scamAdrs \n" );
     LogPrintf(" \n" );
     scamAdrs.printList(true);
+    LogPrintf(" \n" );
+    LogPrintf(" -----------------------------------------\n" );
+    LogPrintf(" \n" );
+
+
+    LogPrintf(" -----------------------------------------\n" );
+    LogPrintf("Banned addesses before getAllReceiversFromList() are: \n adresa[0] \n" );
+    LogPrintf(" \n" );
+    adresa[0].printList(true);
     LogPrintf(" \n" );
     LogPrintf(" -----------------------------------------\n" );
     LogPrintf(" \n" );
