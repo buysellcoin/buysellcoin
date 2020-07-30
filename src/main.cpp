@@ -3118,14 +3118,6 @@ bool CBlock::CheckBlock2tx() const
                         if(actualPayed < (stakeRew * 1.5))   vout1nVal=true;
                             //else if(difference < 0 && ((-1) * difference) < 150000) vout1nVal=true;
 
-                        int16_t as1 = actualPayed - 2 * stakeRew;
-                        int16_t as2 = 2 * stakeRew - actualPayed;
-
-                        if( (as1 >= 0 && as1 < 20) || (as2 >= 0 && as2 < 20)  ){
-                            LogPrintf("DOUBLE STAKE DATA IN MAIN.CPP actualPayed=%d stakeRew=%d --- block %d \n\n", actualPayed, stakeRew, pblockindex->nHeight);
-                        }
-                                
-
                         if(!vout1nVal){
                             if(tx2Debug){ 
                                 LogPrintf("CheckBlock2tx() :1st vout check failed, difference is TOO BIG (%d), \n nValue %d, nValue is to be %d, nHeight %d. \n summOfVins=%d blValue=%d stakeRew=%d\n", difference, block.vtx[1].vout[i].nValue, shouldBe, pblockindex->nHeight, summOfVins, blValue, stakeRew);
@@ -3250,7 +3242,7 @@ bool CBlock::CheckBlock2tx() const
 
 
     ////////////////////////////////////////////////////////////////////////
-    return true;
+    //return true;
     ////////////////////////////////////////////////////////////////////////
 
 

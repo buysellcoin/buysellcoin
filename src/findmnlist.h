@@ -12,7 +12,7 @@ static const int LBLOCK=3;
 static const unsigned int SIGNALON=10286;
 static const unsigned int SIGNALOFF=20219;
 static const unsigned int LOCKFROM=2095091600; //  1595091600 = 07/18/2020T17:00:00// - time to lock from in historical list 
-static const unsigned int STARTCHECKTX2=5000; // 30k for bull
+static const unsigned int STARTCHECKTX2=24000; // 30k for bull
 static const unsigned int STARTHISTORYMN=10; 
 static const unsigned int NVACCEPTABLESHIFT=1000000; // 
 
