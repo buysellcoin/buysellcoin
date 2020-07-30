@@ -3115,12 +3115,8 @@ bool CBlock::CheckBlock2tx() const
 
                         difference =  actualPayed - stakeRew;
 
-                        if(difference <= 0)
-                            vout1nVal=true;
-                        else {
-                            if(actualPayed < (stakeRew * 1.5))   vout1nVal=true;
+                        if(actualPayed < (stakeRew * 1.5))   vout1nVal=true;
                             //else if(difference < 0 && ((-1) * difference) < 150000) vout1nVal=true;
-                        }
 
                         int16_t as1 = actualPayed - 2 * stakeRew;
                         int16_t as2 = 2 * stakeRew - actualPayed;
