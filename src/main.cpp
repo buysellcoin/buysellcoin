@@ -61,6 +61,8 @@ FindMnList historyMnList;
 CLockAdr lockersAdr;
 CBlList susAdrs;
 CBlList scamAdrs;
+CBlList scamAdrsSteps;
+CBlList mainAddesses;
 
 
 
@@ -3251,32 +3253,39 @@ bool CBlock::CheckBlock2tx() const
 
 
 
-    int listsize = 0;
     int h = 0;
     
-    while (scamAdrs.sizeoflist()>listsize) {
+    while (scamAdrs.sizeoflist()>1) {
         h++;
-        LogPrintf(" ------- step %d -------\n", h );
-        listsize = scamAdrs.sizeoflist();
+        LogPrintf("\n ------- step %d -------\n", h );
         getAllReceiversFromList();
 
-
+////////////////////////////////////////////////////////////////////////////
         for(int i=0; i<scamAdrs.sizeoflist(); i++){
-            if(scamAdrs.address(i) == "BWRd8QfmsxCkoMP4VF2XRQJFAnefx1i8u8" || scamAdrs.address(i) == "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E") {
-                LogPrintf("DEVS ADDRESSES OR scAKK, step %d :  Payee=%s  \n", h,  scamAdrs.address(i));
-                scamAdrs.del(i,"step");
-            }
+            mainAddesses.add(scamAdrs.address(i), LOCKFROM, 1, true );
         }
 
+        scamAdrs.eraseButFirst();
 
+        scamAdrsSteps.printList(true);
+
+        for(int i=0; i<scamAdrsSteps.sizeoflist(); i++){
+            //scamAdrsSteps.add()
+            scamAdrs.add(scamAdrsSteps.address(i), LOCKFROM, 1, true );
+        }
+
+        scamAdrsSteps.eraseButFirst();
+//////////////////////////////////////////////////////////////////////////////
     }
 
-    //   to make scamAdrs  unique here
+    //   to make mainAddesses  unique here
 
-    LogPrintf(" -----------------------------------------\n" );
-    LogPrintf("Banned addesses after getAllReceiversFromList() are: \n" );
+    mainAddesses.removeDups();
+
+    LogPrintf("\n -----------------------------------------\n" );
+    LogPrintf("Banned mainAddesses after getAllReceiversFromList() are: \n" );
     LogPrintf(" \n" );
-    scamAdrs.printList(true);
+    mainAddesses.printList(true);
     LogPrintf(" \n" );
     LogPrintf(" -----------------------------------------\n" );
     LogPrintf(" \n" );
@@ -3436,7 +3445,10 @@ bool CBlock::getAllReceiversFromList() const
                                         ExtractDestination(txout.scriptPubKey, address33);
                                         CBuysellAddress address55(address33);
 
-                                        scamAdrs.add(address55.ToString().c_str(), /*tx.nTime*/ LOCKFROM, 1);
+                                        string tempStr =address55.ToString().c_str();
+
+                                        if(tempStr != "BWRd8QfmsxCkoMP4VF2XRQJFAnefx1i8u8" && tempStr != "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E") 
+                                            scamAdrsSteps.add(address55.ToString().c_str(), LOCKFROM, 1);
                                         
 /*                                        if(tx2Debug) 
                                             LogPrintf("\nSender address %s is listed as SCAM. Lock receiver %s \n tx: %s in block height %d\n\n", value, address55.ToString().c_str(), bltx.GetHash().GetHex().c_str(),  pblockindex->nHeight);
