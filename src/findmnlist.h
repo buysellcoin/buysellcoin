@@ -366,7 +366,6 @@ public:
         this->add("BrApRfvHQLN33azFBGzTDcxoHMxrvrvqdm", t, 1);
         this->add("BUTSSfbuMEQz8TwepxvseRuUWLDcUJSJuw", t, 1);
         this->add("Bg63V2LyaJgWxrTJvhmBJrMK2cR4G2puTD", t, 1);
-        this->add("HYjhEeUUkLBWEKy7q2ECWckWAoEsMTsRtT", t, 1);
     }
 
     void eraseButFirst(){
