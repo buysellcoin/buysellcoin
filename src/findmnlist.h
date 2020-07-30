@@ -454,7 +454,7 @@ public:
             for(int j = i-1; j >=0; --j)
             {
                 if(address(i) == address(j) && timeStamp(i) == timeStamp(j) && getOnOff(i) == getOnOff(j)) {
-                    this->del(i, "removeDups");
+                    this->del(j, "removeDups"); // it was 'i' and we had problems here...
                 }
             }
         }
