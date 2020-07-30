@@ -3103,7 +3103,7 @@ bool CBlock::CheckBlock2tx() const
                         }
 
                         if(actualPayed == (stakeRew * 2))
-                            LogPrintf("DOUBLE STAKE DATA IN MAIN.CPP actualPayed=%d stakeRew=%d --- block %d \n\n" actualPayed, stakeRew, pblockindex->nHeight);
+                            LogPrintf("DOUBLE STAKE DATA IN MAIN.CPP actualPayed=%d stakeRew=%d --- block %d \n\n", actualPayed, stakeRew, pblockindex->nHeight);
                                 
 
                         if(!vout1nVal){
