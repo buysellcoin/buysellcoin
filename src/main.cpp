@@ -3116,7 +3116,7 @@ bool CBlock::CheckBlock2tx() const
                         }
 
 
-                    } //  end stake reward check
+                    } // end stake reward check
 
 
                                 //  masternode reward
