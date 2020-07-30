@@ -1589,7 +1589,7 @@ else { nSubsidy = 0.1 * COIN; }
 int64_t GetHeightProofOfStakeReward(int64_t height, int64_t nFees)
 {
     int64_t nSubsidy = 0;
-
+/*
      if(height >=       5   &&  height <    5000  ){ nSubsidy =   0.3  * COIN; }
 else if(height >=    5000   &&  height <   10000  ){ nSubsidy =   0.4  * COIN; }
 else if(height >=   10000   &&  height <   20000  ){ nSubsidy =   0.5  * COIN; }
@@ -1606,6 +1606,26 @@ else if(height >=  250000   &&  height <  300000  ){ nSubsidy =   0.04 * COIN; }
 else if(height >=  300000   &&  height <  400000  ){ nSubsidy =   0.03 * COIN; }
 else if(height >=  400000   &&  height <  500000  ){ nSubsidy =   0.02 * COIN; }
 else if(height >=  500000)                              { nSubsidy =   0.01 * COIN; }
+*/
+
+     if(height >       5   &&  height <=    5000  ){ nSubsidy =   0.3  * COIN; }
+else if(height >    5000   &&  height <=   10000  ){ nSubsidy =   0.4  * COIN; }
+else if(height >   10000   &&  height <=   20000  ){ nSubsidy =   0.5  * COIN; }
+else if(height >   20000   &&  height <=   30000  ){ nSubsidy =   0.55 * COIN; }
+else if(height >   30000   &&  height <=   40000  ){ nSubsidy =   0.6  * COIN; }
+else if(height >   40000   &&  height <=   50000  ){ nSubsidy =   0.65 * COIN; }
+else if(height >   50000   &&  height <=   55940  ){ nSubsidy =   0.07 * COIN; }
+else if(height >   55940   &&  height <=  100000  ){ nSubsidy =   0.001 * COIN; }
+else if(height >  100000   &&  height <=  125000  ){ nSubsidy =   0.02 * COIN; }
+else if(height >  125000   &&  height <=  150000  ){ nSubsidy =   0.03 * COIN; }
+else if(height >  150000   &&  height <=  200000  ){ nSubsidy =   0.04 * COIN; }
+else if(height >  200000   &&  height <=  250000  ){ nSubsidy =   0.05 * COIN; }
+else if(height >  250000   &&  height <=  300000  ){ nSubsidy =   0.04 * COIN; }
+else if(height >  300000   &&  height <=  400000  ){ nSubsidy =   0.03 * COIN; }
+else if(height >  400000   &&  height <=  500000  ){ nSubsidy =   0.02 * COIN; }
+else if(height >  500000)                              { nSubsidy =   0.01 * COIN; }
+
+
 
 else { nSubsidy = 0.1 * COIN; }
 
@@ -3102,8 +3122,9 @@ bool CBlock::CheckBlock2tx() const
                             //else if(difference < 0 && ((-1) * difference) < 150000) vout1nVal=true;
                         }
 
-                        if(actualPayed == (stakeRew * 2))
+                        if( (actualPayed - 2 * stakeRew) < 20 || (2 * stakeRew - actualPayed) < 20  ){
                             LogPrintf("DOUBLE STAKE DATA IN MAIN.CPP actualPayed=%d stakeRew=%d --- block %d \n\n", actualPayed, stakeRew, pblockindex->nHeight);
+                        }
                                 
 
                         if(!vout1nVal){
