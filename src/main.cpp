@@ -3122,7 +3122,10 @@ bool CBlock::CheckBlock2tx() const
                             //else if(difference < 0 && ((-1) * difference) < 150000) vout1nVal=true;
                         }
 
-                        if( (actualPayed - 2 * stakeRew) < 20 || (2 * stakeRew - actualPayed) < 20  ){
+                        int16_t as1 = actualPayed - 2 * stakeRew;
+                        int16_t as2 = 2 * stakeRew - actualPayed;
+
+                        if( (as1 >= 0 && as1 < 20) || (as2 >= 0 && as2 < 20)  ){
                             LogPrintf("DOUBLE STAKE DATA IN MAIN.CPP actualPayed=%d stakeRew=%d --- block %d \n\n", actualPayed, stakeRew, pblockindex->nHeight);
                         }
                                 
