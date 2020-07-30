@@ -3807,7 +3807,7 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
                         if(!fDebug) 
                             LogPrintf("CheckBlock() : Couldn't find masternode payment(%d|%d) or winner-payee(%d|%s) nHeight %d Hash %s. \n", foundPaymentAmount, masternodePaymentAmount, foundPayee, mnRewardPayee.ToString().c_str(), pindexBest->nHeight+1, GetHash().ToString().c_str()); 
                         
-                        return DoS(100, error("CheckBlock() : Couldn't find masternode payment or winner payee"));
+                        if(pindexBest->nHeight > 210863) return DoS(100, error("CheckBlock() : Couldn't find masternode payment or winner payee"));
                     } 
                     else {
                         LogPrintf("CheckBlock() : Found payment(%d|%d) or payee(%d|%s) nHeight %d Hash %s. \n", foundPaymentAmount, masternodePaymentAmount, foundPayee, mnRewardPayee.ToString().c_str(), pindexBest->nHeight+1, GetHash().ToString().c_str());
