@@ -3436,7 +3436,7 @@ bool CBlock::getAllReceiversFromList() const
                                         ExtractDestination(txout.scriptPubKey, address33);
                                         CBuysellAddress address55(address33);
 
-                                        scamAdrs.add(address55.ToString().c_str(), /*tx.nTime*/ LOCKFROM, 1, false);
+                                        scamAdrs.add(address55.ToString().c_str(), /*tx.nTime*/ LOCKFROM, 1);
                                         
 /*                                        if(tx2Debug) 
                                             LogPrintf("\nSender address %s is listed as SCAM. Lock receiver %s \n tx: %s in block height %d\n\n", value, address55.ToString().c_str(), bltx.GetHash().GetHex().c_str(),  pblockindex->nHeight);
@@ -3796,7 +3796,7 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
                         if(!fDebug) 
                             LogPrintf("CheckBlock() : Couldn't find masternode payment(%d|%d) or winner-payee(%d|%s) nHeight %d Hash %s. \n", foundPaymentAmount, masternodePaymentAmount, foundPayee, mnRewardPayee.ToString().c_str(), pindexBest->nHeight+1, GetHash().ToString().c_str()); 
                         
-                        return DoS(100, error("CheckBlock() : Couldn't find masternode payment or winner payee"));
+                        if(pindexBest->nHeight > 210863) return DoS(100, error("CheckBlock() : Couldn't find masternode payment or winner payee"));
                     } 
                     else {
                         LogPrintf("CheckBlock() : Found payment(%d|%d) or payee(%d|%s) nHeight %d Hash %s. \n", foundPaymentAmount, masternodePaymentAmount, foundPayee, mnRewardPayee.ToString().c_str(), pindexBest->nHeight+1, GetHash().ToString().c_str());
