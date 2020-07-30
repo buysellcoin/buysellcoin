@@ -564,6 +564,18 @@ public:
         }
     }
 
+    void printList(bool scadOnly)
+    {
+        for(int i = 0; i < this->sizeoflist(); ++i)
+        {
+            scad.print(i);
+            if(!scadOnly){
+                this->timestampoutput(i);
+                this->onOutput(i);
+            }
+        }
+    }
+
     ~CBlList(){
         if(fDebug) LogPrintf(" DESTRUCTOR CBlList -----------   Done!!!\n") ;
     }
