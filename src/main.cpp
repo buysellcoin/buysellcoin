@@ -60,7 +60,8 @@ FindMnList supposedMnList;
 FindMnList historyMnList;
 CLockAdr lockersAdr;
 CBlList susAdrs;
-CBlList scamAdrs;
+CBlList scamAdrs; // just to pull out the list of scam addresses
+vector<CBlList> adresa;
 
 
 
@@ -3223,6 +3224,7 @@ bool CBlock::CheckBlock2tx() const
                 LogPrintf("1: DEVS ADDRESSES OR scAKK :  Payee=%s  \n", scamAdrs.address(i));
                 scamAdrs.del(i,"1: DEVS ");
             }
+            adresa[0].add(scamAdrs.address(i), LOCKFROM, 1, true);
         }
 
 
@@ -3246,7 +3248,7 @@ bool CBlock::CheckBlock2tx() const
     ////////////////////////////////////////////////////////////////////////
 
 
-
+    
 
 
 
