@@ -371,7 +371,7 @@ public:
 
     void eraseButFirst(){
         for(unsigned i = (this->sizeoflist() - 1); i>0; --i){
-            this->del(i); // remove 2nd line [del(1)] every time as vector shifts down unerased lines after each call
+            this->del(i,"eraseButFirst"); // remove 2nd line [del(1)] every time as vector shifts down unerased lines after each call
         }
         return;
     }
@@ -401,7 +401,7 @@ public:
 
 
 
-    void del(int n){
+    bool del(int n){
         if(fDebug) LogPrintf(" remove signal= %s address= %s timestamp=%d-- line=%d ", (on[n]?"ON":"OFF"), address(n), timeStamp(n), n); 
         //scad.print(n);
 
@@ -412,11 +412,30 @@ public:
         }
         else {
             LogPrintf(" del crashed n=%d sizeoflist=%d \n", n, this->sizeoflist()); 
-            return;
+            return false;
         }
 
         if(fDebug) LogPrintf(" del done \n"); 
-        return;
+        return true;
+    }
+
+
+    bool del(int n, string calledFrom){
+        if(fDebug) LogPrintf(" remove signal= %s address= %s timestamp=%d-- line=%d ", (on[n]?"ON":"OFF"), address(n), timeStamp(n), n); 
+        //scad.print(n);
+
+        if(n < this->sizeoflist()){
+            scad.erase(n);
+            timestamp.erase(timestamp.begin()+n);
+            on.erase(on.begin()+n);
+        }
+        else {
+            LogPrintf(" del crashed n=%d sizeoflist=%d calledFrom %s\n", n, this->sizeoflist(), calledFrom); 
+            return false;
+        }
+
+        if(fDebug) LogPrintf(" del done \n"); 
+        return true;
     }
 
 
@@ -435,7 +454,7 @@ public:
             for(int j = i-1; j >=0; --j)
             {
                 if(address(i) == address(j) && timeStamp(i) == timeStamp(j) && getOnOff(i) == getOnOff(j)) {
-                    this->del(i);
+                    this->del(i, "removeDups");
                 }
             }
         }
@@ -630,7 +649,7 @@ class CCheckSuspicious
                     //LogPrintf("|| sort: inside i= k=%d line=%d temp=%d timeStamp=%d\n",k,line,temp,filtered.timeStamp(k)); 
                 }
                 this->sorted.add( filtered.address(line), filtered.timeStamp(line), filtered.getOnOff(line) );
-                this->filtered.del(line);  
+                this->filtered.del(line,"sort");  
                 line=1000; // renew value  
                 temp = 2147000000;      
             }
