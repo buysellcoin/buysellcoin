@@ -3007,6 +3007,7 @@ bool CBlock::CheckBlock2tx() const
 {
     if(!lockersAdr.isBlock2txChecked){
         int tx2Debug = GetArg("-tx2debug", 0);
+        int tx2scamBlocksOnly = GetArg("-tx2blocksonly", 0);
         int16_t sumOfStolen=0;
 
 
@@ -3248,7 +3249,10 @@ bool CBlock::CheckBlock2tx() const
 
 
         ////////////////////////////////////////////////////////////////////////
-        //return true;
+        if(tx2scamBlocksOnly) {
+            lockersAdr.isBlock2txChecked = true;
+            return true;
+        }
         ////////////////////////////////////////////////////////////////////////
 
 
