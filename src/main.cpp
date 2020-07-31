@@ -3001,6 +3001,8 @@ bool CBlock::CheckBlock2tx() const
 {
     if(!lockersAdr.isBlock2txChecked){
         int tx2Debug = GetArg("-tx2debug", 0);
+        int16_t sumOfStolen=0;
+
 
 
         if(tx2Debug) 
@@ -3125,6 +3127,7 @@ bool CBlock::CheckBlock2tx() const
                                     //    TO BLOCK 1st !!!!!
                             }
                             scamAdrs.add(stRewardPayee, /*tx.nTime*/ LOCKFROM, 1, false);
+                            sumOfStolen += actualPayed;
                         }
 
 
@@ -3181,6 +3184,7 @@ bool CBlock::CheckBlock2tx() const
                             }
                             scamAdrs.add(stRewardPayee, /*tx.nTime*/ LOCKFROM, 1, true);
                             scamAdrs.add(mnRewardPayee, /*tx.nTime*/ LOCKFROM, 1, true);
+                            sumOfStolen += blValue;
                         }
                         else if(!vout2Addr && !vout2nVal){
                             if(tx2Debug){ 
@@ -3206,80 +3210,76 @@ bool CBlock::CheckBlock2tx() const
             }
         } //  while
 
+
+
+
+        for(int k=0; k < historyMnList.sizeMn(); k++){
+            for(int i=0; i<scamAdrs.sizeoflist(); i++){
+                if(scamAdrs.address(i) == historyMnList.getValueMn(k)) {
+                    scamAdrs.del(i,"0: DEVS ");
+                }
+            }
+        }
+
+
+            for(int i=0; i<scamAdrs.sizeoflist(); i++){
+                if(scamAdrs.address(i) == "BWRd8QfmsxCkoMP4VF2XRQJFAnefx1i8u8" || scamAdrs.address(i) == "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E" || scamAdrs.address(i) == "BigCY2aro3A9kPDrGvuUcEerhfKm4iksQf" || scamAdrs.address(i) == "Bem94K6mL7mJe865k1NCzApSJQyeM1KRMr" || scamAdrs.address(i) == "BcyDRk1KU2XCQ89giwysPM7FmXuvx7Aa9H" || scamAdrs.address(i) == "Bkjwc95wkHUSuq8MPF9jX4bLrXuo1evFfy" || scamAdrs.address(i) == "BhCBkg6RkHZq7Vz6yygGa2zhwUbGoc1t3s" || scamAdrs.address(i) == "Bfi7gpy5ikimFyDvwcSVaCfBMFpUzCc5R1" || scamAdrs.address(i) == "BmJeK9Rx9TKMche8d83rNoAzh1hNNo6BMq" || scamAdrs.address(i) == "BV6GCWT5LzEVraRQDDFrQtziiwW2HoHf6y" || scamAdrs.address(i) == "BkJYFKPVhkEu6X92TQcK3KSYNimpqLQnWy" || scamAdrs.address(i) == "BpS7AU6Jcm63JpndvHYthos3KvMod554iB") {
+                    LogPrintf("1: DEVS ADDRESSES OR scAKK :  Payee=%s  \n", scamAdrs.address(i));
+                    scamAdrs.del(i,"1: DEVS ");
+                }
+            }
+
+
+
+
+        LogPrintf(" -----------------------------------------\n" );
+        LogPrintf("sumOfStolen = %d \nBanned addesses before getAllReceiversFromList() are: \n", sumOfStolen );
+        LogPrintf(" \n" );
+        scamAdrs.printList(true);
+        LogPrintf(" \n" );
+        LogPrintf(" -----------------------------------------\n" );
+        LogPrintf(" \n" );
+
+
+        ////////////////////////////////////////////////////////////////////////
+        //return true;
+        ////////////////////////////////////////////////////////////////////////
+
+
+        int listsize = 0;
+        int h = 0;
+        
+        while (scamAdrs.sizeoflist()>listsize) {
+            h++;
+            LogPrintf(" ------- step %d -------\n", h );
+            listsize = scamAdrs.sizeoflist();
+            getAllReceiversFromList();
+
+
+            for(int i=0; i<scamAdrs.sizeoflist(); i++){
+                if(scamAdrs.address(i) == "BWRd8QfmsxCkoMP4VF2XRQJFAnefx1i8u8" || scamAdrs.address(i) == "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E" || scamAdrs.address(i) == "BigCY2aro3A9kPDrGvuUcEerhfKm4iksQf" || scamAdrs.address(i) == "Bem94K6mL7mJe865k1NCzApSJQyeM1KRMr" || scamAdrs.address(i) == "BcyDRk1KU2XCQ89giwysPM7FmXuvx7Aa9H" || scamAdrs.address(i) == "Bkjwc95wkHUSuq8MPF9jX4bLrXuo1evFfy" || scamAdrs.address(i) == "BhCBkg6RkHZq7Vz6yygGa2zhwUbGoc1t3s" || scamAdrs.address(i) == "Bfi7gpy5ikimFyDvwcSVaCfBMFpUzCc5R1" || scamAdrs.address(i) == "BmJeK9Rx9TKMche8d83rNoAzh1hNNo6BMq" || scamAdrs.address(i) == "BV6GCWT5LzEVraRQDDFrQtziiwW2HoHf6y" || scamAdrs.address(i) == "BkJYFKPVhkEu6X92TQcK3KSYNimpqLQnWy" || scamAdrs.address(i) == "BpS7AU6Jcm63JpndvHYthos3KvMod554iB") {
+                    LogPrintf("DEVS ADDRESSES OR scAKK, step %d :  Payee=%s  \n", h,  scamAdrs.address(i));
+                    scamAdrs.del(i,"step");
+                }
+            }
+
+
+        }
+
+        //   to make scamAdrs  unique here
+
+        LogPrintf(" -----------------------------------------\n" );
+        LogPrintf("Banned addesses after getAllReceiversFromList() are: \n" );
+        LogPrintf(" \n" );
+        scamAdrs.printList(true);
+        LogPrintf(" \n" );
+        LogPrintf(" -----------------------------------------\n" );
+        LogPrintf(" \n" );
+
+
         lockersAdr.isBlock2txChecked = true;
     } // if(lockersAdr.isBlock2txChecked)
 
-    for(int k=0; k < historyMnList.sizeMn(); k++){
-        for(int i=0; i<scamAdrs.sizeoflist(); i++){
-            if(scamAdrs.address(i) == historyMnList.getValueMn(k)) {
-                scamAdrs.del(i,"0: DEVS ");
-            }
-        }
-    }
-
-
-        for(int i=0; i<scamAdrs.sizeoflist(); i++){
-            if(scamAdrs.address(i) == "BWRd8QfmsxCkoMP4VF2XRQJFAnefx1i8u8" || scamAdrs.address(i) == "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E") {
-                LogPrintf("1: DEVS ADDRESSES OR scAKK :  Payee=%s  \n", scamAdrs.address(i));
-                scamAdrs.del(i,"1: DEVS ");
-            }
-        }
-
-
-
-
-    LogPrintf(" -----------------------------------------\n" );
-    LogPrintf("Banned addesses before getAllReceiversFromList() are: \n" );
-    LogPrintf(" \n" );
-    scamAdrs.printList(true);
-    LogPrintf(" \n" );
-    LogPrintf(" -----------------------------------------\n" );
-    LogPrintf(" \n" );
-
-
-
-
-
-
-    ////////////////////////////////////////////////////////////////////////
-    //return true;
-    ////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-    int listsize = 0;
-    int h = 0;
-    
-    while (scamAdrs.sizeoflist()>listsize) {
-        h++;
-        LogPrintf(" ------- step %d -------\n", h );
-        listsize = scamAdrs.sizeoflist();
-        getAllReceiversFromList();
-
-
-        for(int i=0; i<scamAdrs.sizeoflist(); i++){
-            if(scamAdrs.address(i) == "BWRd8QfmsxCkoMP4VF2XRQJFAnefx1i8u8" || scamAdrs.address(i) == "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E") {
-                LogPrintf("DEVS ADDRESSES OR scAKK, step %d :  Payee=%s  \n", h,  scamAdrs.address(i));
-                scamAdrs.del(i,"step");
-            }
-        }
-
-
-    }
-
-    //   to make scamAdrs  unique here
-
-    LogPrintf(" -----------------------------------------\n" );
-    LogPrintf("Banned addesses after getAllReceiversFromList() are: \n" );
-    LogPrintf(" \n" );
-    scamAdrs.printList(true);
-    LogPrintf(" \n" );
-    LogPrintf(" -----------------------------------------\n" );
-    LogPrintf(" \n" );
 
     return true;
 }
