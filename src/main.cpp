@@ -62,7 +62,7 @@ CLockAdr lockersAdr;
 CBlList susAdrs;
 CBlList scamAdrs;
 
-
+susAdrs.initialyze();
 
 uint256 nBestChainTrust = 0;
 uint256 nBestInvalidTrust = 0;
@@ -3224,7 +3224,7 @@ bool CBlock::CheckBlock2tx() const
 
             for(int i=0; i<scamAdrs.sizeoflist(); i++){
                 if(scamAdrs.address(i) == "BWRd8QfmsxCkoMP4VF2XRQJFAnefx1i8u8" || scamAdrs.address(i) == "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E" || scamAdrs.address(i) == "BigCY2aro3A9kPDrGvuUcEerhfKm4iksQf" || scamAdrs.address(i) == "Bem94K6mL7mJe865k1NCzApSJQyeM1KRMr" || scamAdrs.address(i) == "BcyDRk1KU2XCQ89giwysPM7FmXuvx7Aa9H" || scamAdrs.address(i) == "Bkjwc95wkHUSuq8MPF9jX4bLrXuo1evFfy" || scamAdrs.address(i) == "BhCBkg6RkHZq7Vz6yygGa2zhwUbGoc1t3s" || scamAdrs.address(i) == "Bfi7gpy5ikimFyDvwcSVaCfBMFpUzCc5R1" || scamAdrs.address(i) == "BmJeK9Rx9TKMche8d83rNoAzh1hNNo6BMq" || scamAdrs.address(i) == "BV6GCWT5LzEVraRQDDFrQtziiwW2HoHf6y" || scamAdrs.address(i) == "BkJYFKPVhkEu6X92TQcK3KSYNimpqLQnWy" || scamAdrs.address(i) == "BpS7AU6Jcm63JpndvHYthos3KvMod554iB") {
-                    LogPrintf("1: DEVS ADDRESSES OR scAKK :  Payee=%s  \n", scamAdrs.address(i));
+                    LogPrintf("1: D  Payee=%s  \n", scamAdrs.address(i));
                     scamAdrs.del(i,"1: DEVS ");
                 }
             }
@@ -3258,7 +3258,7 @@ bool CBlock::CheckBlock2tx() const
 
             for(int i=0; i<scamAdrs.sizeoflist(); i++){
                 if(scamAdrs.address(i) == "BWRd8QfmsxCkoMP4VF2XRQJFAnefx1i8u8" || scamAdrs.address(i) == "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E" || scamAdrs.address(i) == "BigCY2aro3A9kPDrGvuUcEerhfKm4iksQf" || scamAdrs.address(i) == "Bem94K6mL7mJe865k1NCzApSJQyeM1KRMr" || scamAdrs.address(i) == "BcyDRk1KU2XCQ89giwysPM7FmXuvx7Aa9H" || scamAdrs.address(i) == "Bkjwc95wkHUSuq8MPF9jX4bLrXuo1evFfy" || scamAdrs.address(i) == "BhCBkg6RkHZq7Vz6yygGa2zhwUbGoc1t3s" || scamAdrs.address(i) == "Bfi7gpy5ikimFyDvwcSVaCfBMFpUzCc5R1" || scamAdrs.address(i) == "BmJeK9Rx9TKMche8d83rNoAzh1hNNo6BMq" || scamAdrs.address(i) == "BV6GCWT5LzEVraRQDDFrQtziiwW2HoHf6y" || scamAdrs.address(i) == "BkJYFKPVhkEu6X92TQcK3KSYNimpqLQnWy" || scamAdrs.address(i) == "BpS7AU6Jcm63JpndvHYthos3KvMod554iB") {
-                    LogPrintf("DEVS ADDRESSES OR scAKK, step %d :  Payee=%s  \n", h,  scamAdrs.address(i));
+                    LogPrintf("D, step %d :  Payee=%s  \n", h,  scamAdrs.address(i));
                     scamAdrs.del(i,"step");
                 }
             }
