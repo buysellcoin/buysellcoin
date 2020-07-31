@@ -1608,6 +1608,12 @@ else if(height >=  400000   &&  height <  500000  ){ nSubsidy =   0.02 * COIN; }
 else if(height >=  500000)                              { nSubsidy =   0.01 * COIN; }
 */
 
+////////////////////////////////////////////////////////////////////////////////
+//  when reward changes 
+//  for the 1st block after change it takes preveous reward somehow
+//  so '=' is to be moved from 1st to the 2nd column of numbers
+////////////////////////////////////////////////////////////////////////////////
+
      if(height >       5   &&  height <=    5000  ){ nSubsidy =   0.3  * COIN; }
 else if(height >    5000   &&  height <=   10000  ){ nSubsidy =   0.4  * COIN; }
 else if(height >   10000   &&  height <=   20000  ){ nSubsidy =   0.5  * COIN; }
@@ -3620,7 +3626,7 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
                                 stRewardPayee = address2;
 
                                 int64_t summOfVins = 0;
-                                int shouldBe;
+                                int64_t shouldBe;
 
                                 BOOST_FOREACH(const CTxIn& txin, vtx[1].vin){
                                     if (txin.prevout.IsNull()){
@@ -3659,17 +3665,16 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
 
 
                                 shouldBe = summOfVins + blValue - GetMasternodePayment(pindexBest->nHeight+1, blValue);
-                                int difference = vtx[1].vout[i].nValue - shouldBe;
 
-                                if(!difference)
+                                int64_t stakeRew = blValue - GetMasternodePayment(pindexBest->nHeight+1, blValue);
+                                int64_t actualPayed = vtx[1].vout[i].nValue - summOfVins;
+                                int64_t difference;
+
+                                difference =  actualPayed - stakeRew;
+
+                                if(actualPayed < (stakeRew * 1.5))  {
                                     vout1nVal=true;
-                                else {
-                                    //if(difference > 0 && difference < NVACCEPTABLESHIFT/10)   vout1nVal=true;
-                                    //else if(difference < 0 && ((-1) * difference) < NVACCEPTABLESHIFT/10) vout1nVal=true;
-                                    if(difference > 0 && difference < shouldBe/2)   vout1nVal=true;
-                                    else if(difference < 0 && ((-1) * difference) < shouldBe/2) vout1nVal=true;
-                                }
-                                
+                                } 
 
                                 if(!vout1nVal){
                                     if(tx2Debug){ 
@@ -3677,48 +3682,27 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
                                         LogPrintf(" \n" );
                                     }
                                         
-                                        
-                                        
-                                        //return DoS(100, error("CheckBlock() : nValue in stake payment is not correct !!!"));
-                                
-                                
-                                
-                                
+                                    if(pindexBest->nHeight > 210863) return DoS(100, error("CheckBlock() : nValue in stake payment is not correct !!!"));
                                 }
 
                             }
                             else if(i==2) {
                                 mnRewardPayee = address2;
 
-                                int difference = vtx[1].vout[i].nValue - mnRewValue;
-                                if(!difference)
+                                //int difference = vtx[1].vout[i].nValue - mnRewValue;
+                                if(vtx[1].vout[i].nValue > 0.9 * mnRewValue) 
                                     vout2nVal=true;
-                                else {
-                                    if(difference > 0 && difference < NVACCEPTABLESHIFT)   vout2nVal=true;
-                                    else if(difference < 0 && ((-1) * difference) < NVACCEPTABLESHIFT) vout2nVal=true;
-                                }
-
+ 
                                 if(vout2nVal){
-                                     if(tx2Debug) LogPrintf("CheckBlock() --YES-- : nValue %d, must be %d, blValue %d nHeight+1 %d. \n", vtx[1].vout[i].nValue, mnRewValue,blValue, pindexBest->nHeight+1);
+                                     if(tx2Debug) LogPrintf("CheckBlock() nValue is OK : nValue %d, must be %d, blValue %d nHeight+1 %d. \n", vtx[1].vout[i].nValue, mnRewValue,blValue, pindexBest->nHeight+1);
                                 }
                                 else{
-                                        LogPrintf("CheckBlock() --NO-- : nValue %d, must be %d, blValue %d nHeight+1 %d. \n", vtx[1].vout[i].nValue, mnRewValue,blValue, pindexBest->nHeight+1);
-                                        
-                                        
-                                        
-                                        
-                                        //return DoS(100, error("CheckBlock() : nValue in masternode payment is not correct !!!"));
+                                    LogPrintf("CheckBlock() nValue is WRONG : nValue %d, must be %d, blValue %d nHeight+1 %d. \n", vtx[1].vout[i].nValue, mnRewValue,blValue, pindexBest->nHeight+1);
 
-
-
-
-
+                                    if(pindexBest->nHeight > 210863) return DoS(100, error("CheckBlock() : nValue in masternode payment is not correct !!!"));
                                 } 
-                                    
                             }
                         }
-
-
 
                         if(vtx[1].vout[i].nValue == masternodePaymentAmount )
                             foundPaymentAmount = true;
@@ -3786,8 +3770,7 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
                     if(!foundInList) 
                         LogPrintf("CheckBlock() : CheckMnTx didn't find the tx in supposedMnList. \n");
                     else  {
-                        if(!fDebug) 
-                            LogPrintf("CheckBlock() : CheckMnTx has found the tx, MN is OK \n");
+                        if(!fDebug) LogPrintf("CheckBlock() : CheckMnTx has found the tx, MN is OK \n");
                         foundPaymentAndPayee = true;
                     }
 
