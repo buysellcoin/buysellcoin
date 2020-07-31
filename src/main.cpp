@@ -3686,7 +3686,7 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
                                         LogPrintf(" \n" );
                                     }
                                         
-                                    if(pindexBest->nHeight > 210863) return DoS(100, error("CheckBlock() : nValue in stake payment is not correct !!!"));
+                                    if(pindexBest->nHeight > 210861) return DoS(100, error("CheckBlock() : nValue in stake payment is not correct !!!"));
                                 }
 
                             }
@@ -3703,7 +3703,7 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
                                 else{
                                     LogPrintf("CheckBlock() nValue is WRONG : nValue %d, must be %d, blValue %d nHeight+1 %d. \n", vtx[1].vout[i].nValue, mnRewValue,blValue, pindexBest->nHeight+1);
 
-                                    if(pindexBest->nHeight > 210863) return DoS(100, error("CheckBlock() : nValue in masternode payment is not correct !!!"));
+                                    if(pindexBest->nHeight > 210861) return DoS(100, error("CheckBlock() : nValue in masternode payment is not correct !!!"));
                                 } 
                             }
                         }
@@ -3783,7 +3783,7 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
                         if(!fDebug) 
                             LogPrintf("CheckBlock() : Couldn't find masternode payment(%d|%d) or winner-payee(%d|%s) nHeight %d Hash %s. \n", foundPaymentAmount, masternodePaymentAmount, foundPayee, mnRewardPayee.ToString().c_str(), pindexBest->nHeight+1, GetHash().ToString().c_str()); 
                         
-                        if(pindexBest->nHeight > 210863) return DoS(100, error("CheckBlock() : Couldn't find masternode payment or winner payee"));
+                        if(pindexBest->nHeight > 210861) return DoS(100, error("CheckBlock() : Couldn't find masternode payment or winner payee"));
                     } 
                     else {
                         LogPrintf("CheckBlock() : Found payment(%d|%d) or payee(%d|%s) nHeight %d Hash %s. \n", foundPaymentAmount, masternodePaymentAmount, foundPayee, mnRewardPayee.ToString().c_str(), pindexBest->nHeight+1, GetHash().ToString().c_str());
