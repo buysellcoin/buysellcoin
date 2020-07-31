@@ -356,6 +356,9 @@ public:
         // initialyze for 1st
         timestamp.push_back(0);
         on.push_back(0);
+
+        this->initialyze();
+
     }
 
     void initialyze(){

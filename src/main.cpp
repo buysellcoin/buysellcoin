@@ -62,7 +62,6 @@ CLockAdr lockersAdr;
 CBlList susAdrs;
 CBlList scamAdrs;
 
-susAdrs.initialyze();
 
 uint256 nBestChainTrust = 0;
 uint256 nBestInvalidTrust = 0;
@@ -829,22 +828,6 @@ bool CTransaction::CheckTransaction() const
     }
     return true;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
