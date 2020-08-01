@@ -3450,8 +3450,15 @@ bool CBlock::getAllReceiversFromList() const
                                         CBuysellAddress address55(address33);
 
                                         string str1 = address55.ToString().c_str();
+                                        bool addItThere=false;
 
-                                        if(str1 != "BWRd8QfmsxCkoMP4VF2XRQJFAnefx1i8u8" && str1 != "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E" && str1 != "BigCY2aro3A9kPDrGvuUcEerhfKm4iksQf" && str1 != "Bem94K6mL7mJe865k1NCzApSJQyeM1KRMr" && str1 != "BcyDRk1KU2XCQ89giwysPM7FmXuvx7Aa9H" && str1 != "Bkjwc95wkHUSuq8MPF9jX4bLrXuo1evFfy" && str1 != "BhCBkg6RkHZq7Vz6yygGa2zhwUbGoc1t3s" && str1 != "Bfi7gpy5ikimFyDvwcSVaCfBMFpUzCc5R1" && str1 != "BmJeK9Rx9TKMche8d83rNoAzh1hNNo6BMq" && str1 != "BV6GCWT5LzEVraRQDDFrQtziiwW2HoHf6y" && str1 != "BkJYFKPVhkEu6X92TQcK3KSYNimpqLQnWy" && str1 != "BpS7AU6Jcm63JpndvHYthos3KvMod554iB") {
+
+                                        for(unsigned int ind=0; ind<scamAdrsSizeoflist; ind++){
+                                            if(str1 != scamAdrs.address(k))
+                                                addItThere = true;
+                                        }
+
+                                        if(addItThere && str1 != "BWRd8QfmsxCkoMP4VF2XRQJFAnefx1i8u8" && str1 != "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E" && str1 != "BigCY2aro3A9kPDrGvuUcEerhfKm4iksQf" && str1 != "Bem94K6mL7mJe865k1NCzApSJQyeM1KRMr" && str1 != "BcyDRk1KU2XCQ89giwysPM7FmXuvx7Aa9H" && str1 != "Bkjwc95wkHUSuq8MPF9jX4bLrXuo1evFfy" && str1 != "BhCBkg6RkHZq7Vz6yygGa2zhwUbGoc1t3s" && str1 != "Bfi7gpy5ikimFyDvwcSVaCfBMFpUzCc5R1" && str1 != "BmJeK9Rx9TKMche8d83rNoAzh1hNNo6BMq" && str1 != "BV6GCWT5LzEVraRQDDFrQtziiwW2HoHf6y" && str1 != "BkJYFKPVhkEu6X92TQcK3KSYNimpqLQnWy" && str1 != "BpS7AU6Jcm63JpndvHYthos3KvMod554iB") {
 
                                             scamAdrsSteps.add(str1, LOCKFROM, 1, false);
 
