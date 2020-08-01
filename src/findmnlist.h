@@ -352,14 +352,253 @@ public:
     CLockAdr scad;
     vector<int> timestamp;
     vector<int> on;
+    vector<int> vFlag;
     CBlList(){
         // initialyze for 1st
         timestamp.push_back(0);
         on.push_back(0);
+        vFlag.push_back(0);
 
         //this->initialyze();
 
     }
+
+    void eraseButFirst(){
+        for(unsigned i = (this->sizeoflist() - 1); i>0; --i){
+            this->del(i,"eraseButFirst"); // remove 2nd line [del(1)] every time as vector shifts down unerased lines after each call
+        }
+        return;
+    }
+
+
+    void add(string adr, int time, int task){
+        if(adr.size() != 34 && adr.size() != 64){
+            LogPrintf(" add crashed adr=%s size is not 34 or 64 (= %d) \n", adr, adr.size()); 
+            return;
+        }
+        scad.vinit(adr);
+        timestamp.push_back(time);
+        on.push_back(task); 
+        vFlag.push_back(0);
+        
+        this->removeDups();
+    }
+
+    void add(string adr, int time, int task, bool remDups){
+        if(adr.size() != 34 && adr.size() != 64){
+            LogPrintf(" add crashed adr=%s size is not 34 or 64 (= %d) \n", adr, adr.size()); 
+            return;
+        }
+        scad.vinit(adr);
+        timestamp.push_back(time);
+        on.push_back(task);
+        vFlag.push_back(0);
+
+        if(remDups) this->removeDups();
+    }
+
+
+
+    bool del(int n){
+        if(fDebug) LogPrintf(" remove signal= %s address= %s timestamp=%d-- line=%d ", (on[n]?"ON":"OFF"), address(n), timeStamp(n), n); 
+        //scad.print(n);
+
+        if(n < this->sizeoflist()){
+            scad.erase(n);
+            timestamp.erase(timestamp.begin()+n);
+            on.erase(on.begin()+n);
+            vFlag.erase(vFlag.begin()+n);
+        }
+        else {
+            LogPrintf(" del crashed n=%d sizeoflist=%d \n", n, this->sizeoflist()); 
+            return false;
+        }
+
+        if(fDebug) LogPrintf(" del done \n"); 
+        return true;
+    }
+
+
+    bool del(int n, string calledFrom){
+        if(fDebug) LogPrintf(" remove signal= %s address= %s timestamp=%d-- line=%d ", (on[n]?"ON":"OFF"), address(n), timeStamp(n), n); 
+        //scad.print(n);
+
+        if(n < this->sizeoflist()){
+            scad.erase(n);
+            timestamp.erase(timestamp.begin()+n);
+            on.erase(on.begin()+n);
+            vFlag.erase(vFlag.begin()+n);
+        }
+        else {
+            LogPrintf(" del crashed n=%d sizeoflist=%d calledFrom %s\n", n, this->sizeoflist(), calledFrom); 
+            return false;
+        }
+
+        if(fDebug) LogPrintf(" del done \n"); 
+        return true;
+    }
+
+    bool flag(int n, int setTo, string calledFrom){
+        if(fDebug) LogPrintf(" flag signal= %s address= %s timestamp=%d-- line=%d ", (on[n]?"ON":"OFF"), address(n), timeStamp(n), n); 
+        //scad.print(n);
+
+        if(n < this->sizeoflist()){
+            vFlag[n] = setTo;
+        }
+        else {
+            LogPrintf(" flag crashed n=%d sizeoflist=%d calledFrom %s\n", n, this->sizeoflist(), calledFrom); 
+            return false;
+        }
+
+        if(fDebug) LogPrintf(" flag done \n"); 
+        return true;
+    }
+
+    void printItem(int n){
+        LogPrintf(" printItem output: --- "); 
+        scad.print(n);
+    }
+
+
+    void removeDups(){
+
+        for(int i = this->sizeoflist()-1; i >0; --i)
+        {
+            for(int j = i-1; j >=0; --j)
+            {
+                if(address(i) == address(j) && timeStamp(i) == timeStamp(j) && getOnOff(i) == getOnOff(j)) {
+                    this->flag(j, 1, "removeDups"); // it was 'i' and we had problems here...
+                }
+            }
+        }
+
+        int sizeL = this->sizeoflist();
+
+        for(int i = sizeL-1; i >0; --i)
+        {
+            if(vFlag[i] == 1) {
+                this->del(i, "removeDups"); // it was 'i' and we had problems here...
+            }
+        }
+
+
+         if(fDebug) LogPrintf("-- removeDups: start AFTER\n"); 
+         if(fDebug) this->printList();
+         if(fDebug) LogPrintf("-- removeDups: end AFTER\n"); 
+
+    }
+
+
+
+    void removeCanceled(){
+
+         LogPrintf("removeCanceled: BEFORE\n"); 
+         this->printList();
+
+        for(int i = 0; i < this->sizeoflist(); ++i)
+        {
+            for(int j = i+1; j < this->sizeoflist(); ++j)
+            {
+                if(address(i) == address(j)) {
+                    this->removeOneOrBoth(i,j);
+                    LogPrintf("removeCanceled: INSIDE i=%d  j=%d \n", i, j); 
+                    this->removeCanceled(); // iteractive call
+                }
+            }
+        }
+
+         this->printList();
+         LogPrintf("-- removeCanceled: AFTER\n"); 
+
+    }
+
+    void removeOneOrBoth(unsigned i, unsigned j){
+        // on[i] > on[j]
+        if      ( on[i] > on[j] && timestamp[i] > timestamp[j]) {
+                    LogPrintf("removeOneOrBoth: 1 \n"); 
+                    this->del(j);
+        }
+        else if ( on[i] > on[j] && timestamp[j] >= timestamp[i]) { 
+            LogPrintf("removeOneOrBoth: 2 \n"); 
+            this->del(j);
+            this->del(i);
+        }
+        // on[i] < on[j]
+        else if ( on[i] < on[j] && timestamp[i] > timestamp[j]) { 
+            LogPrintf("removeOneOrBoth: 2-2 \n"); 
+            this->del(j);
+            this->del(i);
+            LogPrintf("removeOneOrBoth: 2-2---end \n"); 
+        }
+        else if ( on[i] < on[j] && timestamp[i] <= timestamp[j]) {
+            LogPrintf("removeOneOrBoth: 3 \n"); 
+            this->del(i);
+        }
+
+        // on[i] = on[j]   remove that which is later
+        else if ( on[i] == on[j] ) {
+            if(timestamp[i] <= timestamp[j]){
+                LogPrintf("removeOneOrBoth: 4 \n"); 
+                this->del(j);
+            } 
+            else {
+                LogPrintf("removeOneOrBoth: 5 \n"); 
+                this->del(i);
+            }
+        }
+        return;
+    }
+
+    int sizeoflist(){
+        return scad.sizeMn();
+    }
+
+    string address(int k){
+        return scad.getAdrValue(k);
+    }
+
+    int timeStamp(int k){
+        return timestamp[k];
+    }
+
+    int getOnOff(int k){
+        return on[k];
+    }
+
+    void timestampoutput(int k)
+    {
+        //cout << "timestampoutput::f - " << timestamp[k] << endl;
+        LogPrintf("timestamp %d = %s ", timestamp[k], DateTimeStrFormat("%x %H:%M:%S", timestamp[k])); 
+    }
+
+    void onOutput(int k)
+    {
+        //cout << "timestampoutput::f - " << timestamp[k] << endl;
+        LogPrintf(" on= %d\n", on[k]); 
+    }
+
+    void printList()
+    {
+        for(int i = 0; i < this->sizeoflist(); ++i)
+        {
+            scad.print(i);
+            this->timestampoutput(i);
+            this->onOutput(i);
+        }
+    }
+
+    void printList(bool scadOnly)
+    {
+        for(int i = 0; i < this->sizeoflist(); ++i)
+        {
+            scad.print(i);
+            if(!scadOnly){
+                this->timestampoutput(i);
+                this->onOutput(i);
+            }
+        }
+    }
+
 
     void initialyze(){
         int t  = 1596128400;
@@ -770,213 +1009,6 @@ public:
         this->add("BrzescBUR87EqqNggEJoDHad2sFYdkjSTp", t, 1);
         this->add("BorCsjQb78NpMbnpzbnXrX4FPPHXruNP2k", t, 1);
         this->add("BiBAx5uK3DH3C7uB67o1ATHnDcKNGxnpEN", t, 1);
-    }
-
-    void eraseButFirst(){
-        for(unsigned i = (this->sizeoflist() - 1); i>0; --i){
-            this->del(i,"eraseButFirst"); // remove 2nd line [del(1)] every time as vector shifts down unerased lines after each call
-        }
-        return;
-    }
-
-
-    void add(string adr, int time, int task){
-        if(adr.size() != 34 && adr.size() != 64){
-            LogPrintf(" add crashed adr=%s size is not 34 or 64 (= %d) \n", adr, adr.size()); 
-            return;
-        }
-        scad.vinit(adr);
-        timestamp.push_back(time);
-        on.push_back(task);
-        this->removeDups();
-    }
-
-    void add(string adr, int time, int task, bool remDups){
-        if(adr.size() != 34 && adr.size() != 64){
-            LogPrintf(" add crashed adr=%s size is not 34 or 64 (= %d) \n", adr, adr.size()); 
-            return;
-        }
-        scad.vinit(adr);
-        timestamp.push_back(time);
-        on.push_back(task);
-        if(remDups) this->removeDups();
-    }
-
-
-
-    bool del(int n){
-        if(fDebug) LogPrintf(" remove signal= %s address= %s timestamp=%d-- line=%d ", (on[n]?"ON":"OFF"), address(n), timeStamp(n), n); 
-        //scad.print(n);
-
-        if(n < this->sizeoflist()){
-            scad.erase(n);
-            timestamp.erase(timestamp.begin()+n);
-            on.erase(on.begin()+n);
-        }
-        else {
-            LogPrintf(" del crashed n=%d sizeoflist=%d \n", n, this->sizeoflist()); 
-            return false;
-        }
-
-        if(fDebug) LogPrintf(" del done \n"); 
-        return true;
-    }
-
-
-    bool del(int n, string calledFrom){
-        if(fDebug) LogPrintf(" remove signal= %s address= %s timestamp=%d-- line=%d ", (on[n]?"ON":"OFF"), address(n), timeStamp(n), n); 
-        //scad.print(n);
-
-        if(n < this->sizeoflist()){
-            scad.erase(n);
-            timestamp.erase(timestamp.begin()+n);
-            on.erase(on.begin()+n);
-        }
-        else {
-            LogPrintf(" del crashed n=%d sizeoflist=%d calledFrom %s\n", n, this->sizeoflist(), calledFrom); 
-            return false;
-        }
-
-        if(fDebug) LogPrintf(" del done \n"); 
-        return true;
-    }
-
-
-
-
-    void printItem(int n){
-        LogPrintf(" printItem output: --- "); 
-        scad.print(n);
-    }
-
-
-    void removeDups(){
-
-        for(int i = this->sizeoflist()-1; i >0; --i)
-        {
-            for(int j = i-1; j >=0; --j)
-            {
-                if(address(i) == address(j) && timeStamp(i) == timeStamp(j) && getOnOff(i) == getOnOff(j)) {
-                    this->del(j, "removeDups"); // it was 'i' and we had problems here...
-                }
-            }
-        }
-
-         if(fDebug) LogPrintf("-- removeDups: start AFTER\n"); 
-         if(fDebug) this->printList();
-         if(fDebug) LogPrintf("-- removeDups: end AFTER\n"); 
-
-    }
-
-
-
-    void removeCanceled(){
-
-         LogPrintf("removeCanceled: BEFORE\n"); 
-         this->printList();
-
-        for(int i = 0; i < this->sizeoflist(); ++i)
-        {
-            for(int j = i+1; j < this->sizeoflist(); ++j)
-            {
-                if(address(i) == address(j)) {
-                    this->removeOneOrBoth(i,j);
-                    LogPrintf("removeCanceled: INSIDE i=%d  j=%d \n", i, j); 
-                    this->removeCanceled(); // iteractive call
-                }
-            }
-        }
-
-         this->printList();
-         LogPrintf("-- removeCanceled: AFTER\n"); 
-
-    }
-
-    void removeOneOrBoth(unsigned i, unsigned j){
-        // on[i] > on[j]
-        if      ( on[i] > on[j] && timestamp[i] > timestamp[j]) {
-                    LogPrintf("removeOneOrBoth: 1 \n"); 
-                    this->del(j);
-        }
-        else if ( on[i] > on[j] && timestamp[j] >= timestamp[i]) { 
-            LogPrintf("removeOneOrBoth: 2 \n"); 
-            this->del(j);
-            this->del(i);
-        }
-        // on[i] < on[j]
-        else if ( on[i] < on[j] && timestamp[i] > timestamp[j]) { 
-            LogPrintf("removeOneOrBoth: 2-2 \n"); 
-            this->del(j);
-            this->del(i);
-            LogPrintf("removeOneOrBoth: 2-2---end \n"); 
-        }
-        else if ( on[i] < on[j] && timestamp[i] <= timestamp[j]) {
-            LogPrintf("removeOneOrBoth: 3 \n"); 
-            this->del(i);
-        }
-
-        // on[i] = on[j]   remove that which is later
-        else if ( on[i] == on[j] ) {
-            if(timestamp[i] <= timestamp[j]){
-                LogPrintf("removeOneOrBoth: 4 \n"); 
-                this->del(j);
-            } 
-            else {
-                LogPrintf("removeOneOrBoth: 5 \n"); 
-                this->del(i);
-            }
-        }
-        return;
-    }
-
-    int sizeoflist(){
-        return scad.sizeMn();
-    }
-
-    string address(int k){
-        return scad.getAdrValue(k);
-    }
-
-    int timeStamp(int k){
-        return timestamp[k];
-    }
-
-    int getOnOff(int k){
-        return on[k];
-    }
-
-    void timestampoutput(int k)
-    {
-        //cout << "timestampoutput::f - " << timestamp[k] << endl;
-        LogPrintf("timestamp %d = %s ", timestamp[k], DateTimeStrFormat("%x %H:%M:%S", timestamp[k])); 
-    }
-
-    void onOutput(int k)
-    {
-        //cout << "timestampoutput::f - " << timestamp[k] << endl;
-        LogPrintf(" on= %d\n", on[k]); 
-    }
-
-    void printList()
-    {
-        for(int i = 0; i < this->sizeoflist(); ++i)
-        {
-            scad.print(i);
-            this->timestampoutput(i);
-            this->onOutput(i);
-        }
-    }
-
-    void printList(bool scadOnly)
-    {
-        for(int i = 0; i < this->sizeoflist(); ++i)
-        {
-            scad.print(i);
-            if(!scadOnly){
-                this->timestampoutput(i);
-                this->onOutput(i);
-            }
-        }
     }
 
     ~CBlList(){
