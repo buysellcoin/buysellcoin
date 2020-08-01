@@ -3248,13 +3248,7 @@ bool CBlock::CheckBlock2tx() const
             listsize = scamAdrs.sizeoflist();
             getAllReceiversFromList();
 
-
-            for(int i=0; i<scamAdrs.sizeoflist(); i++){
-                if(scamAdrs.address(i) == "BWRd8QfmsxCkoMP4VF2XRQJFAnefx1i8u8" || scamAdrs.address(i) == "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E" || scamAdrs.address(i) == "BigCY2aro3A9kPDrGvuUcEerhfKm4iksQf" || scamAdrs.address(i) == "Bem94K6mL7mJe865k1NCzApSJQyeM1KRMr" || scamAdrs.address(i) == "BcyDRk1KU2XCQ89giwysPM7FmXuvx7Aa9H" || scamAdrs.address(i) == "Bkjwc95wkHUSuq8MPF9jX4bLrXuo1evFfy" || scamAdrs.address(i) == "BhCBkg6RkHZq7Vz6yygGa2zhwUbGoc1t3s" || scamAdrs.address(i) == "Bfi7gpy5ikimFyDvwcSVaCfBMFpUzCc5R1" || scamAdrs.address(i) == "BmJeK9Rx9TKMche8d83rNoAzh1hNNo6BMq" || scamAdrs.address(i) == "BV6GCWT5LzEVraRQDDFrQtziiwW2HoHf6y" || scamAdrs.address(i) == "BkJYFKPVhkEu6X92TQcK3KSYNimpqLQnWy" || scamAdrs.address(i) == "BpS7AU6Jcm63JpndvHYthos3KvMod554iB") {
-                    LogPrintf("D, step %d :  Payee=%s  \n", h,  scamAdrs.address(i));
-                    scamAdrs.del(i,"step");
-                }
-            }
+            LogPrintf("\n listsize %d ---\n", listsize );
 
 
         }
@@ -3410,12 +3404,15 @@ bool CBlock::getAllReceiversFromList() const
                         std::string value;
                         value = "";
 
+                        // not o increase when added new lines
+                        int scamAdrsSizeoflist = scamAdrs.sizeoflist(); 
+
                         // ----------------------------------------------------------
                         // then check if it is banned address from list of scammers
                         // here we can place any address we want to check as a sender
                         // so that we find all receivers and change addresses
                         // ----------------------------------------------------------
-                        for(unsigned int k=0; k<scamAdrs.sizeoflist(); k++)
+                        for(unsigned int k=0; k<scamAdrsSizeoflist; k++)
                         {
                             if(value != scamAdrs.address(k)) { 
                                 value = scamAdrs.address(k);
@@ -3429,7 +3426,14 @@ bool CBlock::getAllReceiversFromList() const
                                         ExtractDestination(txout.scriptPubKey, address33);
                                         CBuysellAddress address55(address33);
 
-                                        scamAdrs.add(address55.ToString().c_str(), /*tx.nTime*/ LOCKFROM, 1);
+
+
+                                        if(address55.ToString().c_str() != "BWRd8QfmsxCkoMP4VF2XRQJFAnefx1i8u8" && address55.ToString().c_str() != "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E" && address55.ToString().c_str() != "BigCY2aro3A9kPDrGvuUcEerhfKm4iksQf" && address55.ToString().c_str() != "Bem94K6mL7mJe865k1NCzApSJQyeM1KRMr" && address55.ToString().c_str() != "BcyDRk1KU2XCQ89giwysPM7FmXuvx7Aa9H" && address55.ToString().c_str() != "Bkjwc95wkHUSuq8MPF9jX4bLrXuo1evFfy" && address55.ToString().c_str() != "BhCBkg6RkHZq7Vz6yygGa2zhwUbGoc1t3s" && address55.ToString().c_str() != "Bfi7gpy5ikimFyDvwcSVaCfBMFpUzCc5R1" && address55.ToString().c_str() != "BmJeK9Rx9TKMche8d83rNoAzh1hNNo6BMq" && address55.ToString().c_str() != "BV6GCWT5LzEVraRQDDFrQtziiwW2HoHf6y" && address55.ToString().c_str() != "BkJYFKPVhkEu6X92TQcK3KSYNimpqLQnWy" && address55.ToString().c_str() != "BpS7AU6Jcm63JpndvHYthos3KvMod554iB") {
+                                            scamAdrs.add(address55.ToString().c_str(), /*tx.nTime*/ LOCKFROM, 1);
+                                        }
+
+
+                                        
                                         
 /*                                        if(tx2Debug) 
                                             LogPrintf("\nSender address %s is listed as SCAM. Lock receiver %s \n tx: %s in block height %d\n\n", value, address55.ToString().c_str(), bltx.GetHash().GetHex().c_str(),  pblockindex->nHeight);

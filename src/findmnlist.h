@@ -357,7 +357,7 @@ public:
         timestamp.push_back(0);
         on.push_back(0);
 
-        this->initialyze();
+        //this->initialyze();
 
     }
 
