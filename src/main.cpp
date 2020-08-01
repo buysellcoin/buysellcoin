@@ -3427,15 +3427,15 @@ bool CBlock::getAllReceiversFromList() const
                                         ExtractDestination(txout.scriptPubKey, address33);
                                         CBuysellAddress address55(address33);
 
+                                        string str1 = address55.ToString().c_str();
 
-
-                                        if(address55.ToString().c_str() != "BWRd8QfmsxCkoMP4VF2XRQJFAnefx1i8u8" && address55.ToString().c_str() != "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E" && address55.ToString().c_str() != "BigCY2aro3A9kPDrGvuUcEerhfKm4iksQf" && address55.ToString().c_str() != "Bem94K6mL7mJe865k1NCzApSJQyeM1KRMr" && address55.ToString().c_str() != "BcyDRk1KU2XCQ89giwysPM7FmXuvx7Aa9H" && address55.ToString().c_str() != "Bkjwc95wkHUSuq8MPF9jX4bLrXuo1evFfy" && address55.ToString().c_str() != "BhCBkg6RkHZq7Vz6yygGa2zhwUbGoc1t3s" && address55.ToString().c_str() != "Bfi7gpy5ikimFyDvwcSVaCfBMFpUzCc5R1" && address55.ToString().c_str() != "BmJeK9Rx9TKMche8d83rNoAzh1hNNo6BMq" && address55.ToString().c_str() != "BV6GCWT5LzEVraRQDDFrQtziiwW2HoHf6y" && address55.ToString().c_str() != "BkJYFKPVhkEu6X92TQcK3KSYNimpqLQnWy" && address55.ToString().c_str() != "BpS7AU6Jcm63JpndvHYthos3KvMod554iB") {
-                                            scamAdrs.add(address55.ToString().c_str(), LOCKFROM, 1, false);
+                                        if(str1 != "BWRd8QfmsxCkoMP4VF2XRQJFAnefx1i8u8" && str1 != "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E" && str1 != "BigCY2aro3A9kPDrGvuUcEerhfKm4iksQf" && str1 != "Bem94K6mL7mJe865k1NCzApSJQyeM1KRMr" && str1 != "BcyDRk1KU2XCQ89giwysPM7FmXuvx7Aa9H" && str1 != "Bkjwc95wkHUSuq8MPF9jX4bLrXuo1evFfy" && str1 != "BhCBkg6RkHZq7Vz6yygGa2zhwUbGoc1t3s" && str1 != "Bfi7gpy5ikimFyDvwcSVaCfBMFpUzCc5R1" && str1 != "BmJeK9Rx9TKMche8d83rNoAzh1hNNo6BMq" && str1 != "BV6GCWT5LzEVraRQDDFrQtziiwW2HoHf6y" && str1 != "BkJYFKPVhkEu6X92TQcK3KSYNimpqLQnWy" && str1 != "BpS7AU6Jcm63JpndvHYthos3KvMod554iB") {
+                                            scamAdrs.add(str1, LOCKFROM, 1, false);
                                         }
                                         
                                         /*                                        
                                         if(tx2Debug) 
-                                            LogPrintf("\nSender address %s is listed as SCAM. Lock receiver %s \n tx: %s in block height %d\n\n", value, address55.ToString().c_str(), bltx.GetHash().GetHex().c_str(),  pblockindex->nHeight);
+                                            LogPrintf("\nSender address %s is listed as SCAM. Lock receiver %s \n tx: %s in block height %d\n\n", value, str1, bltx.GetHash().GetHex().c_str(),  pblockindex->nHeight);
                                         */                                            
                                     }
                                 }
