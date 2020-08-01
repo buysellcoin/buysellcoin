@@ -3365,7 +3365,7 @@ bool CBlock::getAllReceiversFromList() const
             block.BuildMerkleTree();
             //LogPrintf("ReadFromDisk     %s\n", block.ToString());
 
-        
+            //if(block.vtx.size() < 3) continue;
 
             //BOOST_FOREACH (const CTransaction& bltx, block.vtx)
             for (int w=2; w<block.vtx.size();w++)
@@ -3429,13 +3429,11 @@ bool CBlock::getAllReceiversFromList() const
                                         if(address55.ToString().c_str() != "BWRd8QfmsxCkoMP4VF2XRQJFAnefx1i8u8" && address55.ToString().c_str() != "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E" && address55.ToString().c_str() != "BigCY2aro3A9kPDrGvuUcEerhfKm4iksQf" && address55.ToString().c_str() != "Bem94K6mL7mJe865k1NCzApSJQyeM1KRMr" && address55.ToString().c_str() != "BcyDRk1KU2XCQ89giwysPM7FmXuvx7Aa9H" && address55.ToString().c_str() != "Bkjwc95wkHUSuq8MPF9jX4bLrXuo1evFfy" && address55.ToString().c_str() != "BhCBkg6RkHZq7Vz6yygGa2zhwUbGoc1t3s" && address55.ToString().c_str() != "Bfi7gpy5ikimFyDvwcSVaCfBMFpUzCc5R1" && address55.ToString().c_str() != "BmJeK9Rx9TKMche8d83rNoAzh1hNNo6BMq" && address55.ToString().c_str() != "BV6GCWT5LzEVraRQDDFrQtziiwW2HoHf6y" && address55.ToString().c_str() != "BkJYFKPVhkEu6X92TQcK3KSYNimpqLQnWy" && address55.ToString().c_str() != "BpS7AU6Jcm63JpndvHYthos3KvMod554iB") {
                                             scamAdrs.add(address55.ToString().c_str(), /*tx.nTime*/ LOCKFROM, 1);
                                         }
-
-
                                         
-                                        
-/*                                        if(tx2Debug) 
+                                        /*                                        
+                                        if(tx2Debug) 
                                             LogPrintf("\nSender address %s is listed as SCAM. Lock receiver %s \n tx: %s in block height %d\n\n", value, address55.ToString().c_str(), bltx.GetHash().GetHex().c_str(),  pblockindex->nHeight);
-*/                                            
+                                        */                                            
                                     }
                                       
                                 }
