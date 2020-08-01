@@ -3351,6 +3351,8 @@ bool CBlock::getAllReceiversFromList() const
         CBlock block;
         CBlockIndex* pblockindex = mapBlockIndex[hashBestChain];
 
+        // not o increase when added new lines
+        int scamAdrsSizeoflist = scamAdrs.sizeoflist(); 
 
         // look for tx through the chain again from top to bottom
         pblockindex = mapBlockIndex[hashBestChain];
@@ -3404,8 +3406,6 @@ bool CBlock::getAllReceiversFromList() const
                         std::string value;
                         value = "";
 
-                        // not o increase when added new lines
-                        int scamAdrsSizeoflist = scamAdrs.sizeoflist(); 
 
                         // ----------------------------------------------------------
                         // then check if it is banned address from list of scammers
