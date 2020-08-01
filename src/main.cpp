@@ -62,7 +62,7 @@ CLockAdr lockersAdr;
 CBlList susAdrs;
 CBlList scamAdrs;
 CBlList scamAdrsSteps;
-CBlList mainAddesses;
+CBlList mainAddresses;
 
 
 
@@ -3259,9 +3259,18 @@ bool CBlock::CheckBlock2tx() const
 
             ////////////////////////////////////////////////////////////////////////////
             for(int i=0; i<scamAdrs.sizeoflist(); i++){
-                mainAddesses.add(scamAdrs.address(i), LOCKFROM, 1, false );
+                mainAddresses.add(scamAdrs.address(i), LOCKFROM, 1, false );
+            }
+
+            mainAddresses.removeDups();
+
+            scamAdrs.eraseButFirst();
+
+            //----------------------
+
+            for(int i=0; i<mainAddresses.sizeoflist(); i++){
                 for(int ind=0; ind<scamAdrsSteps.sizeoflist(); ind++){
-                    if(scamAdrs.address(i) == scamAdrsSteps.address(ind)){
+                    if(mainAddresses.address(i) == scamAdrsSteps.address(ind)){
                         scamAdrsSteps.flag(ind, 1, "CheckBlock2tx");
                     }
                 }
@@ -3269,9 +3278,10 @@ bool CBlock::CheckBlock2tx() const
 
             scamAdrsSteps.delFlaged();
 
-            scamAdrs.eraseButFirst();
-
             scamAdrsSteps.printList(true);
+
+            //----------------------
+
 
             for(int i=0; i<scamAdrsSteps.sizeoflist(); i++){
                 //scamAdrsSteps.add()
@@ -3283,14 +3293,14 @@ bool CBlock::CheckBlock2tx() const
             //////////////////////////////////////////////////////////////////////////////
         }
 
-        //   to make mainAddesses  unique here
+        //   to make mainAddresses  unique here
 
-        mainAddesses.removeDups();
+        mainAddresses.removeDups();
 
         LogPrintf("\n -----------------------------------------\n" );
-        LogPrintf("Banned mainAddesses after getAllReceiversFromList() are: \n" );
+        LogPrintf("Banned mainAddresses after getAllReceiversFromList() are: \n" );
         LogPrintf(" \n" );
-        mainAddesses.printList(true);
+        mainAddresses.printList(true);
         LogPrintf(" \n" );
         LogPrintf(" -----------------------------------------\n" );
         LogPrintf(" \n" );
