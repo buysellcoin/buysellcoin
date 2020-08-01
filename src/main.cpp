@@ -3242,48 +3242,51 @@ bool CBlock::CheckBlock2tx() const
         ////////////////////////////////////////////////////////////////////////
 
 
-    int listsize = 0;
-    int h = 0;
+        int listsize = 0;
+        int h = 0;
     
-    while (scamAdrs.sizeoflist()>2) {
-        h++;
-        listsize = scamAdrs.sizeoflist();
-        LogPrintf("\n listsize %d ---\n", listsize );
+        while (scamAdrs.sizeoflist()>2) {
+            h++;
+            listsize = scamAdrs.sizeoflist();
+            LogPrintf("\n listsize %d ---\n", listsize );
 
-       LogPrintf("\n ------- step %d -------\n", h );
-        getAllReceiversFromList();
+            LogPrintf("\n ------- step %d -------\n", h );
+            getAllReceiversFromList();
 
-////////////////////////////////////////////////////////////////////////////
-        for(int i=0; i<scamAdrs.sizeoflist(); i++){
-            mainAddesses.add(scamAdrs.address(i), LOCKFROM, 1, false );
+            ////////////////////////////////////////////////////////////////////////////
+            for(int i=0; i<scamAdrs.sizeoflist(); i++){
+                mainAddesses.add(scamAdrs.address(i), LOCKFROM, 1, false );
+            }
+
+            scamAdrs.eraseButFirst();
+
+            scamAdrsSteps.printList(true);
+
+            for(int i=0; i<scamAdrsSteps.sizeoflist(); i++){
+                //scamAdrsSteps.add()
+                scamAdrs.add(scamAdrsSteps.address(i), LOCKFROM, 1, false );
+            }
+            scamAdrs.removeDups();
+
+            scamAdrsSteps.eraseButFirst();
+            //////////////////////////////////////////////////////////////////////////////
         }
 
-        scamAdrs.eraseButFirst();
+        //   to make mainAddesses  unique here
 
-        scamAdrsSteps.printList(true);
+        mainAddesses.removeDups();
 
-        for(int i=0; i<scamAdrsSteps.sizeoflist(); i++){
-            //scamAdrsSteps.add()
-            scamAdrs.add(scamAdrsSteps.address(i), LOCKFROM, 1, false );
-        }
-        scamAdrs.removeDups();
+        LogPrintf("\n -----------------------------------------\n" );
+        LogPrintf("Banned mainAddesses after getAllReceiversFromList() are: \n" );
+        LogPrintf(" \n" );
+        mainAddesses.printList(true);
+        LogPrintf(" \n" );
+        LogPrintf(" -----------------------------------------\n" );
+        LogPrintf(" \n" );
 
-        scamAdrsSteps.eraseButFirst();
-//////////////////////////////////////////////////////////////////////////////
-    }
 
-    //   to make mainAddesses  unique here
-
-    mainAddesses.removeDups();
-
-    LogPrintf("\n -----------------------------------------\n" );
-    LogPrintf("Banned mainAddesses after getAllReceiversFromList() are: \n" );
-    LogPrintf(" \n" );
-    mainAddesses.printList(true);
-    LogPrintf(" \n" );
-    LogPrintf(" -----------------------------------------\n" );
-    LogPrintf(" \n" );
-
+        lockersAdr.isBlock2txChecked = true;
+    } // if(lockersAdr.isBlock2txChecked)
 
     return true;
 }
@@ -3467,7 +3470,7 @@ bool CBlock::getAllReceiversFromList() const
             }
         }
 
-    scamAdrs.removeDups();
+    scamAdrsSteps.removeDups();
 
     return true;
 }
