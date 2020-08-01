@@ -61,6 +61,9 @@ FindMnList historyMnList;
 CLockAdr lockersAdr;
 CBlList susAdrs;
 CBlList scamAdrs;
+CBlList scamAdrsSteps;
+CBlList mainAddesses;
+
 
 
 uint256 nBestChainTrust = 0;
@@ -3239,31 +3242,47 @@ bool CBlock::CheckBlock2tx() const
         ////////////////////////////////////////////////////////////////////////
 
 
-        int listsize = 0;
-        int h = 0;
-        
-        while (scamAdrs.sizeoflist()>listsize) {
-            h++;
-            listsize = scamAdrs.sizeoflist();
-            LogPrintf("\n listsize %d ---\n", listsize );
+    int listsize = 0;
+    int h = 0;
+    
+    while (scamAdrs.sizeoflist()>2) {
+        h++;
+        listsize = scamAdrs.sizeoflist();
+        LogPrintf("\n listsize %d ---\n", listsize );
 
-            LogPrintf(" ------- step %d -------\n", h );
-            getAllReceiversFromList();
+       LogPrintf("\n ------- step %d -------\n", h );
+        getAllReceiversFromList();
+
+////////////////////////////////////////////////////////////////////////////
+        for(int i=0; i<scamAdrs.sizeoflist(); i++){
+            mainAddesses.add(scamAdrs.address(i), LOCKFROM, 1, false );
         }
 
-        //   to make scamAdrs  unique here
+        scamAdrs.eraseButFirst();
 
-        LogPrintf(" -----------------------------------------\n" );
-        LogPrintf("Banned addesses after getAllReceiversFromList() are: \n" );
-        LogPrintf(" \n" );
-        scamAdrs.printList(true);
-        LogPrintf(" \n" );
-        LogPrintf(" -----------------------------------------\n" );
-        LogPrintf(" \n" );
+        scamAdrsSteps.printList(true);
 
+        for(int i=0; i<scamAdrsSteps.sizeoflist(); i++){
+            //scamAdrsSteps.add()
+            scamAdrs.add(scamAdrsSteps.address(i), LOCKFROM, 1, false );
+        }
+        scamAdrs.removeDups();
 
-        lockersAdr.isBlock2txChecked = true;
-    } // if(lockersAdr.isBlock2txChecked)
+        scamAdrsSteps.eraseButFirst();
+//////////////////////////////////////////////////////////////////////////////
+    }
+
+    //   to make mainAddesses  unique here
+
+    mainAddesses.removeDups();
+
+    LogPrintf("\n -----------------------------------------\n" );
+    LogPrintf("Banned mainAddesses after getAllReceiversFromList() are: \n" );
+    LogPrintf(" \n" );
+    mainAddesses.printList(true);
+    LogPrintf(" \n" );
+    LogPrintf(" -----------------------------------------\n" );
+    LogPrintf(" \n" );
 
 
     return true;
@@ -3430,7 +3449,9 @@ bool CBlock::getAllReceiversFromList() const
                                         string str1 = address55.ToString().c_str();
 
                                         if(str1 != "BWRd8QfmsxCkoMP4VF2XRQJFAnefx1i8u8" && str1 != "Ba9B8hPM1tfynSxXhBh6HnxHN33n2HMS7E" && str1 != "BigCY2aro3A9kPDrGvuUcEerhfKm4iksQf" && str1 != "Bem94K6mL7mJe865k1NCzApSJQyeM1KRMr" && str1 != "BcyDRk1KU2XCQ89giwysPM7FmXuvx7Aa9H" && str1 != "Bkjwc95wkHUSuq8MPF9jX4bLrXuo1evFfy" && str1 != "BhCBkg6RkHZq7Vz6yygGa2zhwUbGoc1t3s" && str1 != "Bfi7gpy5ikimFyDvwcSVaCfBMFpUzCc5R1" && str1 != "BmJeK9Rx9TKMche8d83rNoAzh1hNNo6BMq" && str1 != "BV6GCWT5LzEVraRQDDFrQtziiwW2HoHf6y" && str1 != "BkJYFKPVhkEu6X92TQcK3KSYNimpqLQnWy" && str1 != "BpS7AU6Jcm63JpndvHYthos3KvMod554iB") {
-                                            scamAdrs.add(str1, LOCKFROM, 1, false);
+
+                                            scamAdrsSteps.add(str1, LOCKFROM, 1, false);
+
                                         }
                                         
                                         /*                                        
