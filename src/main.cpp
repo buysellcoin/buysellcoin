@@ -3244,13 +3244,11 @@ bool CBlock::CheckBlock2tx() const
         
         while (scamAdrs.sizeoflist()>listsize) {
             h++;
-            LogPrintf(" ------- step %d -------\n", h );
             listsize = scamAdrs.sizeoflist();
-            getAllReceiversFromList();
-
             LogPrintf("\n listsize %d ---\n", listsize );
 
-
+            LogPrintf(" ------- step %d -------\n", h );
+            getAllReceiversFromList();
         }
 
         //   to make scamAdrs  unique here
