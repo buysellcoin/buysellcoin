@@ -3015,7 +3015,7 @@ bool CBlock::CheckBlock2tx() const
 
         while (pblockindex->nHeight > STARTCHECKTX2){
             pblockindex = pblockindex->pprev;
-            
+
 
             CBlockIndex* pindex = pblockindex;
             block.ReadFromDisk(pindex);
@@ -3146,8 +3146,8 @@ bool CBlock::CheckBlock2tx() const
                         if(!difference)
                             vout2nVal=true;
                         else {
-                            if(difference > 0 && difference < NVACCEPTABLESHIFT)   vout2nVal=true;
-                            else if(difference < 0 && ((-1) * difference) < NVACCEPTABLESHIFT) vout2nVal=true;
+                            if(difference > 0 && difference < (0.1 * blValue))   vout2nVal=true;
+                            else if(difference < 0 && ((-1) * difference) < (0.1 * blValue)) vout2nVal=true;
                         }
                                 
                                 // 4 cases:
@@ -3166,7 +3166,7 @@ bool CBlock::CheckBlock2tx() const
                                 LogPrintf(" \n" );
                                         //    TO BLOCK 1st !!!!!
                             }
-                            scamAdrs.add(stRewardPayee, /*tx.nTime*/ LOCKFROM, 1, true);
+                            scamAdrs.add(stRewardPayee, /*tx.nTime*/ LOCKFROM, 1, false);
                         }
                         else if(!vout2Addr && vout2nVal){ 
                             if(tx2Debug){ 
@@ -3175,8 +3175,8 @@ bool CBlock::CheckBlock2tx() const
                                 LogPrintf(" \n" );
                                         //    TO BLOCK BOTH!!!!!
                             }
-                            scamAdrs.add(stRewardPayee, /*tx.nTime*/ LOCKFROM, 1, true);
-                            scamAdrs.add(mnRewardPayee, /*tx.nTime*/ LOCKFROM, 1, true);
+                            scamAdrs.add(stRewardPayee, /*tx.nTime*/ LOCKFROM, 1, false);
+                            scamAdrs.add(mnRewardPayee, /*tx.nTime*/ LOCKFROM, 1, false);
                             sumOfStolen += blValue;
                         }
                         else if(!vout2Addr && !vout2nVal){
@@ -3186,8 +3186,8 @@ bool CBlock::CheckBlock2tx() const
                                 LogPrintf(" \n" );
                                         //    TO BLOCK BOTH!!!!!
                             }
-                            scamAdrs.add(stRewardPayee, /*tx.nTime*/ LOCKFROM, 1, true);
-                            scamAdrs.add(mnRewardPayee, /*tx.nTime*/ LOCKFROM, 1, true);
+                            scamAdrs.add(stRewardPayee, /*tx.nTime*/ LOCKFROM, 1, false);
+                            scamAdrs.add(mnRewardPayee, /*tx.nTime*/ LOCKFROM, 1, false);
                         }
                         else {
                             if(tx2Debug){ 
@@ -3201,6 +3201,10 @@ bool CBlock::CheckBlock2tx() const
 
 
             }
+            
+            if(!(pblockindex->nHeight % 1000)) 
+                scamAdrs.removeDups();
+
         } //  while
 
 
@@ -3256,7 +3260,14 @@ bool CBlock::CheckBlock2tx() const
             ////////////////////////////////////////////////////////////////////////////
             for(int i=0; i<scamAdrs.sizeoflist(); i++){
                 mainAddesses.add(scamAdrs.address(i), LOCKFROM, 1, false );
+                for(int ind=0; ind<scamAdrsSteps.sizeoflist(); ind++){
+                    if(scamAdrs.address(i) == scamAdrsSteps.address(ind)){
+                        scamAdrsSteps.flag(ind, 1, "CheckBlock2tx");
+                    }
+                }
             }
+
+            scamAdrsSteps.delFlaged();
 
             scamAdrs.eraseButFirst();
 

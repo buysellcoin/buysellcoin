@@ -459,6 +459,17 @@ public:
         scad.print(n);
     }
 
+    void delFlaged(){
+        int sizeL = this->sizeoflist();
+
+        for(int i = sizeL-1; i >0; --i)
+        {
+            if(vFlag[i] == 1) {
+                this->del(i, "delFlaged"); 
+            }
+        }
+    }
+
 
     void removeDups(){
 
