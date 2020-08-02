@@ -3719,7 +3719,7 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
                                 } 
 
                                 if(!vout1nVal){
-                                    if(tx2Debug){ 
+                                    if( true /*tx2Debug*/){ 
                                         LogPrintf("1st vout check failed, difference is TOO BIG (%d), nValue %d, nValue is to be %d, nHeight %d.\n", difference, vtx[1].vout[i].nValue, shouldBe, pindexBest->nHeight+1);
                                         LogPrintf(" \n" );
                                     }
