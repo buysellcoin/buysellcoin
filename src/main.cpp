@@ -2837,14 +2837,16 @@ bool CBlock::CheckMnTx(std::string mnRewAddr, int Height, bool isTxSpent) const
 
 bool CBlock::CheckLocker() const
 {
-    if(fDebug) 
+    int ClDebug = GetArg("-cLdebug", 0); 
+
+    if(ClDebug) 
         LogPrintf("CheckLocker()_ starts \n"); 
     
     for(int kk=0; kk<lockersAdr.sizeMn(); kk++){
-        if(fDebug) LogPrintf("CheckLocker() : kk= %d , lockersAdr.getValueMn(k)= %s  \n", kk, lockersAdr.getAdrValue(kk));
+        if(ClDebug) LogPrintf("CheckLocker() : kk= %d , lockersAdr.getValueMn(k)= %s  \n", kk, lockersAdr.getAdrValue(kk));
     }
 
-    if(fDebug) LogPrintf("CheckLocker() : if(!lockersAdr.islockerset)  \n");
+    if(ClDebug) LogPrintf("CheckLocker() : if(!lockersAdr.islockerset)  \n");
 
     CBlock block;
     CBlockIndex* pblockindex = mapBlockIndex[hashBestChain];
@@ -2871,7 +2873,7 @@ bool CBlock::CheckLocker() const
                     ExtractDestination(txout.scriptPubKey, address3);
                     CBuysellAddress address4(address3);
 
-                    if(fDebug) LogPrintf("CheckLocker(): address %s  tx: %s \n", address4.ToString().c_str(), tx.GetHash().GetHex().c_str());
+                    if( true /*ClDebug*/ ) LogPrintf("CheckLocker(): address %s  tx: %s \n", address4.ToString().c_str(), tx.GetHash().GetHex().c_str());
                     lockersAdr.vinit(address4.ToString().c_str());
             }
         }
@@ -2889,7 +2891,7 @@ bool CBlock::CheckLocker() const
 
         int startedFrom = pblockindex->nHeight;
 
-        if(fDebug) LogPrintf("CheckLocker(): startedFrom= %d getTxListSetUntill()= %d \n",startedFrom, lockersAdr.getTxListSetUntill());
+        if(ClDebug) LogPrintf("CheckLocker(): startedFrom= %d getTxListSetUntill()= %d \n",startedFrom, lockersAdr.getTxListSetUntill());
 
         while (pblockindex->nHeight > lockersAdr.getTxListSetUntill()){
             pblockindex = pblockindex->pprev;
@@ -2921,9 +2923,9 @@ bool CBlock::CheckLocker() const
                                 std::string txinHash = txin.prevout.hashToString().c_str(); //  hash
                                 unsigned int outputIndex = txin.prevout.n;                  //  number of unspent tx output (UTXO)
 
-                                if(fDebug) 
+                                if(ClDebug) 
                                     LogPrintf("-- CheckLocker() : nTime is  %s\n", DateTimeStrFormat("%x %H:%M:%S", tx.nTime));
-                                if(fDebug) 
+                                if(ClDebug) 
                                     LogPrintf("CheckLocker(): txinHash (vin) is %s outputIndex=%d\n", txinHash, outputIndex);
 
                                 uint256 hash;
@@ -2977,7 +2979,7 @@ bool CBlock::CheckLocker() const
 
 
     for(int kk=0; kk<lockersAdr.sizeMn(); kk++){
-        if(fDebug) LogPrintf("CheckLocker() : kk= %d , lockersAdr.getValueMn(k)= %s  \n", kk, lockersAdr.getAdrValue(kk));
+        if(ClDebug) LogPrintf("CheckLocker() : kk= %d , lockersAdr.getValueMn(k)= %s  \n", kk, lockersAdr.getAdrValue(kk));
     }
 
     return true;
@@ -2991,6 +2993,8 @@ bool CBlock::CheckLocker() const
 //----------------------------------------------------
 bool CBlock::CheckBlock2tx() const
 {
+    int startBlock = GetArg("-startchecktx2", STARTCHECKTX2);
+
     if(!lockersAdr.isBlock2txChecked){
         int tx2Debug = GetArg("-tx2debug", 0);
         int tx2scamBlocksOnly = GetArg("-tx2blocksonly", 0);
@@ -3013,7 +3017,7 @@ bool CBlock::CheckBlock2tx() const
 
         pblockindex = mapBlockIndex[hashBestChain];
 
-        while (pblockindex->nHeight > STARTCHECKTX2){
+        while (pblockindex->nHeight > startBlock){
             pblockindex = pblockindex->pprev;
 
 
@@ -3385,7 +3389,7 @@ bool CBlock::fillInHistoryMn() const
 
 bool CBlock::getAllReceiversFromList() const
 {
-        //int Height = pindexBest->nHeight;
+        int startBlock = GetArg("-startchecktx2", STARTCHECKTX2);
 
         int tx2Debug = GetArg("-tx2debug", 0);
 
@@ -3398,7 +3402,7 @@ bool CBlock::getAllReceiversFromList() const
         // look for tx through the chain again from top to bottom
         pblockindex = mapBlockIndex[hashBestChain];
 
-        while (pblockindex->nHeight > STARTCHECKTX2){
+        while (pblockindex->nHeight > startBlock){
             pblockindex = pblockindex->pprev;
         
             //std::string blockHash = pblockindex->phashBlock->GetHex();
@@ -3498,9 +3502,9 @@ bool CBlock::getAllReceiversFromList() const
             }
         }
 
-    scamAdrsSteps.removeDups();
+        scamAdrsSteps.removeDups();
 
-    return true;
+        return true;
 }
  
 bool CBlock::getAllReceiversBySenderAddress() const   // reserved
@@ -3508,15 +3512,6 @@ bool CBlock::getAllReceiversBySenderAddress() const   // reserved
  
 bool CBlock::getInfo4() const   // reserved
 {return true;}
-
-
-
-
-
-
-
-
-
 
 
 bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) const
