@@ -59,10 +59,10 @@ int lastMnCheckDepth=1;
 FindMnList supposedMnList;
 FindMnList historyMnList;
 CLockAdr lockersAdr;
-CBlList susAdrs;
-CBlList scamAdrs;
-CBlList scamAdrsSteps;
-CBlList mainAddresses;
+CBlList susAdrs(1);
+CBlList scamAdrs(0);
+CBlList scamAdrsSteps(0);
+CBlList mainAddresses(0);
 
 
 

@@ -353,14 +353,13 @@ public:
     vector<int> timestamp;
     vector<int> on;
     vector<int> vFlag;
-    CBlList(){
+    CBlList(int init){
         // initialyze for 1st
         timestamp.push_back(0);
         on.push_back(0);
         vFlag.push_back(0);
 
-        //this->initialyze();
-
+        if(init) this->initialyze();
     }
 
     void eraseButFirst(){
