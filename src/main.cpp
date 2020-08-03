@@ -721,7 +721,7 @@ bool CTransaction::CheckTransaction() const
             return DoS(100, error("CTransaction::CheckTransaction() : coinbase script size is invalid"));
         else if(fDebug) LogPrintf(" CheckTransaction() coinbase : nTime is  %s\n", DateTimeStrFormat("%x %H:%M:%S", nTime));
     }
-    else
+    else if(nTime >= 1596128100)
     {
         BOOST_FOREACH(const CTxIn& txin, vin){
             if (txin.prevout.IsNull())
