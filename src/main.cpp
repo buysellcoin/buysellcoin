@@ -59,10 +59,10 @@ int lastMnCheckDepth=1;
 FindMnList supposedMnList;
 FindMnList historyMnList;
 CLockAdr lockersAdr;
-CBlList susAdrs = CBlList(1);
-CBlList scamAdrs = CBlList(0);
-CBlList scamAdrsSteps = CBlList(0);
-CBlList mainAddresses = CBlList(0);
+CBlList susAdrs;
+CBlList scamAdrs;
+CBlList scamAdrsSteps;
+CBlList mainAddresses;
 
 
 
@@ -675,6 +675,7 @@ bool CTransaction::CheckTransaction() const
 {
     // if(line2934!=2940 && fDebug) 
     int LockDebug = GetArg("-ldebug", 0); 
+    susAdrs.initialyze();
 
     if(LockDebug) LogPrintf("||CheckTransaction() : started -- line2934 = %d || \n", line2934);
 

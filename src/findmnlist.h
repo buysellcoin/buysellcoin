@@ -353,13 +353,14 @@ public:
     vector<int> timestamp;
     vector<int> on;
     vector<int> vFlag;
-    CBlList(int init){
+    bool isInitialyzed;
+    CBlList(){
         // initialyze for 1st
         timestamp.push_back(0);
         on.push_back(0);
         vFlag.push_back(0);
-
-        if(init) this->initialyze();
+        isInitialyzed = false;
+        //if(init) this->initialyze();
     }
 
     void eraseButFirst(){
@@ -782,7 +783,7 @@ public:
         this->add("BZTMsg6LsCX41EwoacFys4yt7KbHpapixt",t,1);
         this->add("BdYRHEXfDUiB9UtiDw3atd3sUPNDNguU1H",t,1);
 
-
+        isInitialyzed = true;
     }
 
     ~CBlList(){
