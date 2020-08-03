@@ -102,7 +102,8 @@ public:
 		vSeeds.push_back(CDNSSeedData("0", "212.237.19.172"));
 		vSeeds.push_back(CDNSSeedData("1", "80.211.10.160"));
 		vSeeds.push_back(CDNSSeedData("2", "80.211.105.100"));
-		vSeeds.push_back(CDNSSeedData("3", "212.237.34.156"));
+		vSeeds.push_back(CDNSSeedData("3", "94.177.215.132"));
+		vSeeds.push_back(CDNSSeedData("4", "77.81.229.37"));
 		//vSeeds.push_back(CDNSSeedData("2", ""));
 
 
