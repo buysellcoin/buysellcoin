@@ -819,8 +819,7 @@ class CCheckSuspicious
                 if(nTime > sorted.timeStamp(k)) {    
                         temp = sorted.getOnOff(k);
 
-                        
-                        LogPrintf(" -----------    LockDebug=%d\n", LDebug); 
+                        //LogPrintf(" -----------    LockDebug=%d\n", LDebug); 
                         /*if(LDebug) {
                             LogPrintf(" -----------    k=%d\n", k); 
                             sorted.printList();
