@@ -677,7 +677,9 @@ bool CTransaction::CheckTransaction(int callfrom) const
     int LockDebug = GetArg("-ldebug", 0); 
     susAdrs.initialyze();
 
-    if(LockDebug) LogPrintf("||CheckTransaction() : started -- line2934 = %d callfrom=%d|| \n", line2934, callfrom);
+    //if(LockDebug) LogPrintf("||CheckTransaction() : started -- line2934 = %d callfrom=%d|| \n", line2934, callfrom);
+    if(LockDebug) 
+        LogPrintf("CheckTransaction(%d) :started -- line2934=%d, main tx hash is  %s\n", callfrom, line2934, GetHash().GetHex().c_str());
 
     
 
