@@ -1573,9 +1573,9 @@ int64_t GetProofOfStakeReward(const CBlockIndex* pindexPrev, int64_t nCoinAge, i
     else if(nBestHeight >=  125000   &&  nBestHeight <  150000  ){ nSubsidy =   0.03 * COIN; }
     else if(nBestHeight >=  150000   &&  nBestHeight <  200000  ){ nSubsidy =   0.04 * COIN; }
 
-    else if(nBestHeight >=  200000   &&  nBestHeight <  211000  ){ nSubsidy =   0.05 * COIN; }
-    else if(nBestHeight >=  211000   &&  nBestHeight <  211010  ){ nSubsidy =   2    * COIN; }
-    else if(nBestHeight >=  211010   &&  nBestHeight <  215000  ){ nSubsidy =   0.05 * COIN; }
+    else if(nBestHeight >=  200000   &&  nBestHeight <  211010  ){ nSubsidy =   0.05 * COIN; }
+    else if(nBestHeight >=  211010   &&  nBestHeight <  211020  ){ nSubsidy =   2    * COIN; }
+    else if(nBestHeight >=  211020   &&  nBestHeight <  215000  ){ nSubsidy =   0.05 * COIN; }
 
     else if(nBestHeight >=  215000   &&  nBestHeight <  250000  ){ nSubsidy =   0.03 * COIN; }
     else if(nBestHeight >=  250000   &&  nBestHeight <  275000  ){ nSubsidy =   0.04 * COIN; }
@@ -1616,10 +1616,10 @@ int64_t GetHeightProofOfStakeReward(int64_t height, int64_t nFees)
     else if(height >  125000   &&  height <=  150000  ){ nSubsidy =   0.03 * COIN; }
     else if(height >  150000   &&  height <=  200000  ){ nSubsidy =   0.04 * COIN; }
     
-    else if(height >  200000   &&  height <=  211000  ){ nSubsidy =   0.05 * COIN; }
-    else if(height >  211000   &&  height <=  211010  ){ nSubsidy =   2    * COIN; }
-    else if(height >  211010   &&  height <=  215000  ){ nSubsidy =   0.05 * COIN; }
-    
+    else if(height >  200000   &&  height <=  211010  ){ nSubsidy =   0.05 * COIN; }
+    else if(height >  211010   &&  height <=  211020  ){ nSubsidy =   2    * COIN; }
+    else if(height >  211020   &&  height <=  215000  ){ nSubsidy =   0.05 * COIN; }
+
     else if(height >  215000   &&  height <=  250000  ){ nSubsidy =   0.03 * COIN; }
     else if(height >  250000   &&  height <=  275000  ){ nSubsidy =   0.04 * COIN; }
     else if(height >  275000   &&  height <=  300000  ){ nSubsidy =   0.05 * COIN; }
