@@ -671,13 +671,13 @@ class CScAddr
 
 
 
-bool CTransaction::CheckTransaction() const
+bool CTransaction::CheckTransaction(int callfrom) const
 {
     // if(line2934!=2940 && fDebug) 
     int LockDebug = GetArg("-ldebug", 0); 
     susAdrs.initialyze();
 
-    if(LockDebug) LogPrintf("||CheckTransaction() : started -- line2934 = %d || \n", line2934);
+    if(LockDebug) LogPrintf("||CheckTransaction() : started -- line2934 = %d callfrom=%d|| \n", line2934, callfrom);
 
     
 
@@ -882,7 +882,7 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CTransaction &tx, bool fLimitFree,
 
     if(fDebug) LogPrintf("AcceptToMemoryPool() : line2934=849 check transaction %s on height %d\n",tx.GetHash().GetHex().c_str(), pindexBest->nHeight+1);
     
-    if (!tx.CheckTransaction())
+    if (!tx.CheckTransaction(849))
         return error("AcceptToMemoryPool : CheckTransaction failed");
 
     line2934 = 1;
@@ -1067,7 +1067,7 @@ bool AcceptableInputs(CTxMemPool& pool, const CTransaction &txo, bool fLimitFree
 
     if(fDebug) LogPrintf("AcceptableInputs() : line2934=1032 check transaction %s on height %d\n",tx.GetHash().GetHex().c_str(), pindexBest->nHeight+1);
 
-    if (!tx.CheckTransaction())
+    if (!tx.CheckTransaction(1032))
         return error("AcceptableInputs : CheckTransaction failed");
 
     line2934 = 1;
@@ -3848,7 +3848,7 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
     {
         line2934=2940;
         if(LockDebug) LogPrintf("BOOST_FOREACH : Start check transaction %s on height %d\n",tx.GetHash().GetHex().c_str(), pindexBest->nHeight+1);
-        if (!tx.CheckTransaction())
+        if (!tx.CheckTransaction(2940))
             return DoS(tx.nDoS, error("CheckBlock() : CheckTransaction failed"));
         line2934=1;
 
