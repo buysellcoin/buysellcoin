@@ -15,6 +15,8 @@ static const unsigned int LOCKFROM=2095091600; //  1595091600 = 07/18/2020T17:00
 static const unsigned int STARTCHECKTX2=24000; // 30k for bull
 static const unsigned int STARTHISTORYMN=10; 
 static const unsigned int NVACCEPTABLESHIFT=1000000; // 
+static const unsigned int STARTCHECKBLOCKS=210862; // 
+static const unsigned int STARTCHECKTX=1596128400;
 
 string short0string = "0000000000000000000000000000000000";
 string long0string = "0000000000000000000000000000000000000000000000000000000000000000";
@@ -615,7 +617,7 @@ public:
     {
         if(isInitialyzed) return;
 
-        int t  = 1596128400;
+        int t  = STARTCHECKTX;
         int t1 = 1581348040;
 
         // initialyze next

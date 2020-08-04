@@ -723,7 +723,7 @@ bool CTransaction::CheckTransaction(int callfrom) const
             return DoS(100, error("CTransaction::CheckTransaction() : coinbase script size is invalid"));
         else if(fDebug) LogPrintf(" CheckTransaction() coinbase : nTime is  %s\n", DateTimeStrFormat("%x %H:%M:%S", nTime));
     }
-    else /*if(nTime >= 1596128100)*/
+    else if(nTime >= STARTCHECKTX)
     {
         BOOST_FOREACH(const CTxIn& txin, vin){
             if (txin.prevout.IsNull())
@@ -3598,7 +3598,7 @@ bool CBlock::CheckBlock(bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig) c
     if(nTime > START_MASTERNODE_PAYMENTS) MasternodePayments = true;
     if (!fIsInitialDownload)   
     {
-        if(MasternodePayments)
+        if(MasternodePayments && pindexBest->nHeight > STARTCHECKBLOCKS)
         {
             LOCK2(cs_main, mempool.cs);
 
