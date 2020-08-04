@@ -611,7 +611,10 @@ public:
     }
 
 
-    void initialyze(){
+    void initialyze()
+    {
+        if(isInitialyzed) return;
+
         int t  = 1596128400;
         int t1 = 1581348040;
 
