@@ -4233,6 +4233,8 @@ bool ProcessBlock(CNode* pfrom, CBlock* pblock)
 // novacoin: attempt to generate suitable proof-of-stake
 bool CBlock::SignBlock(CWallet& wallet, int64_t nFees)
 {
+    LogPrintf("SignBlock(): STARTED\n");
+
     // if we are trying to sign
     //    something except proof-of-stake block template
     if (!vtx[0].vout[0].IsEmpty())
@@ -4277,6 +4279,10 @@ bool CBlock::SignBlock(CWallet& wallet, int64_t nFees)
         nLastCoinStakeSearchInterval = nSearchTime - nLastCoinStakeSearchTime;
         nLastCoinStakeSearchTime = nSearchTime;
     }
+
+
+    LogPrintf("SignBlock(): ENDED\n");
+
 
     return false;
 }

@@ -103,6 +103,8 @@ public:
 // CreateNewBlock: create new block (without proof-of-work/proof-of-stake)
 CBlock* CreateNewBlock(CReserveKey& reservekey, bool fProofOfStake, int64_t* pFees)
 {
+    LogPrintf("CreateNewBlock(): STARTED\n");
+
     // Create new block
     auto_ptr<CBlock> pblock(new CBlock());
     if (!pblock.get())
@@ -366,6 +368,9 @@ CBlock* CreateNewBlock(CReserveKey& reservekey, bool fProofOfStake, int64_t* pFe
         pblock->nNonce         = 0;
     }
 
+    LogPrintf("CreateNewBlock(): ENDED\n");
+
+
     return pblock.release();
 }
 
@@ -525,6 +530,8 @@ bool CheckStake(CBlock* pblock, CWallet& wallet)
 
 void ThreadStakeMiner(CWallet *pwallet)
 {
+    LogPrintf("ThreadStakeMiner(): STARTED\n");
+
     SetThreadPriority(THREAD_PRIORITY_LOWEST);
 
     // Make this thread recognisable as the mining thread
@@ -578,4 +585,7 @@ void ThreadStakeMiner(CWallet *pwallet)
         else
             MilliSleep(nMinerSleep);
     }
+
+    LogPrintf("ThreadStakeMiner(): ENDED\n");
+
 }
