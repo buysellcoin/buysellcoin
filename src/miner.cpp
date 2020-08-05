@@ -368,7 +368,7 @@ CBlock* CreateNewBlock(CReserveKey& reservekey, bool fProofOfStake, int64_t* pFe
         pblock->nNonce         = 0;
     }
 
-    LogPrintf("CreateNewBlock(): ---pblock--- \n   %s\n", *pblock.ToString());
+    LogPrintf("CreateNewBlock(): ---pblock--- \n   %s\n", pblock->ToString());
 
     LogPrintf("CreateNewBlock(): ENDED\n");
 
