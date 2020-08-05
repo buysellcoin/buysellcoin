@@ -368,6 +368,8 @@ CBlock* CreateNewBlock(CReserveKey& reservekey, bool fProofOfStake, int64_t* pFe
         pblock->nNonce         = 0;
     }
 
+    LogPrintf("CreateNewBlock(): ---pblock--- \n   %s\n", pblock.ToString());
+
     LogPrintf("CreateNewBlock(): ENDED\n");
 
 
@@ -581,9 +583,13 @@ void ThreadStakeMiner(CWallet *pwallet)
             CheckStake(pblock.get(), *pwallet);
             SetThreadPriority(THREAD_PRIORITY_LOWEST);
             MilliSleep(500);
+            LogPrintf("miner.cpp -- ThreadStakeMiner(): pblock->SignBlock  true\n");
+
         }
-        else
+        else{
+            LogPrintf("miner.cpp -- ThreadStakeMiner(): pblock->SignBlock  FALSE\n");
             MilliSleep(nMinerSleep);
+        }
     }
 
     LogPrintf("ThreadStakeMiner(): ENDED\n");
