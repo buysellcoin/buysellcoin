@@ -439,12 +439,17 @@ CMasternode* CMasternodeMan::GetCurrentMasterNode(int mod, int64_t nBlockHeight,
     // scan for winner
     BOOST_FOREACH(CMasternode& mn, vMasternodes) {
         mn.Check();
+
+        LogPrintf("GetCurrentMasterNode() protocolVersion= %d , mn: %s .\n", mn.protocolVersion, (mn.IsEnabled()?"mn.IsEnabled()" : "mn Is NOT Enabled()") );
+
         if(mn.protocolVersion < minProtocol || !mn.IsEnabled()) continue;
 
         // calculate the score for each masternode
         uint256 n = mn.CalculateScore(mod, nBlockHeight);
         unsigned int n2 = 0;
         memcpy(&n2, &n, sizeof(n2));
+
+        LogPrintf("GetCurrentMasterNode() n2= %d , score %d .\n", n2, score );
 
         // determine the winner
         if(n2 > score){
