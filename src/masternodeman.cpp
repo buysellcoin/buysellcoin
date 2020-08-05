@@ -436,6 +436,8 @@ CMasternode* CMasternodeMan::GetCurrentMasterNode(int mod, int64_t nBlockHeight,
     unsigned int score = 0;
     CMasternode* winner = NULL;
 
+    LogPrintf("GetCurrentMasterNode() started...\n" );
+
     // scan for winner
     BOOST_FOREACH(CMasternode& mn, vMasternodes) {
         mn.Check();
@@ -457,6 +459,8 @@ CMasternode* CMasternodeMan::GetCurrentMasterNode(int mod, int64_t nBlockHeight,
             winner = &mn;
         }
     }
+
+    LogPrintf("GetCurrentMasterNode() end...\n" );
 
     return winner;
 }
