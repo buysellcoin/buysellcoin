@@ -4237,8 +4237,10 @@ bool CBlock::SignBlock(CWallet& wallet, int64_t nFees)
 
     // if we are trying to sign
     //    something except proof-of-stake block template
-    if (!vtx[0].vout[0].IsEmpty())
+    if (!vtx[0].vout[0].IsEmpty()){
+        LogPrintf("SignBlock: FALSE ------------ 1 ---------\n");
         return false;
+    }
 
     // if we are trying to sign
     //    a complete proof-of-stake block
@@ -4272,13 +4274,20 @@ bool CBlock::SignBlock(CWallet& wallet, int64_t nFees)
                 vtx.insert(vtx.begin() + 1, txCoinStake);
                 hashMerkleRoot = BuildMerkleTree();
 
+                LogPrintf("SignBlock: FALSE??? key.Sign(GetHash(), vchBlockSig);\n");
                 // append a signature to our block
                 return key.Sign(GetHash(), vchBlockSig);
             }
+            else LogPrintf("SignBlock: FALSE ------------ 2 ---------\n");
         }
+        else LogPrintf("SignBlock: FALSE ------------ 3 ---------\n");
+
         nLastCoinStakeSearchInterval = nSearchTime - nLastCoinStakeSearchTime;
         nLastCoinStakeSearchTime = nSearchTime;
+        LogPrintf("SignBlock: FALSE ------------ 4 ---------\n");
     }
+    else LogPrintf("SignBlock: FALSE ------------ 5 ---------\n");
+
 
 
     LogPrintf("SignBlock(): ENDED\n");
