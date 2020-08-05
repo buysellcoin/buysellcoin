@@ -23,13 +23,13 @@ class CValidationState;
 static const int64_t DARKSEND_COLLATERAL = (0.01*COIN);
 static const int64_t DARKSEND_POOL_MAX = (9999.99*COIN);
 
-static const int64_t STATIC_POS_REWARD = 10 * CENT; //Constant POS reward of 10%
+//static const int64_t STATIC_POS_REWARD = 10 * CENT; //Constant POS reward of 10%
 static const int64_t TARGET_SPACING_FORK = 90;
 static const int64_t TARGET_SPACING = 90;
 static const int64_t TARGET_SPACING2 = 90;
 static const bool NO_FORK = true;
 static const signed int HARD_FORK_BLOCK = 90000000;
-static const int64_t STAKE_TIMESPAN_SWITCH_TIME = 1508858115;
+static const int64_t STAKE_TIMESPAN_SWITCH_TIME =  1508858115;
 static const int64_t STAKE_TIMESPAN_SWITCH_TIME1 = 1509555600; //1 Nov 2017 17:00:00 GMT
 static const int64_t FORK_TIME = 1510059600;  //November 7, 2017 1:00:00 PM GMT
 
@@ -81,10 +81,21 @@ inline int64_t FutureDrift(int64_t nTime) { return nTime + DRIFT; }
 static const unsigned char REJECT_INVALID = 0x10;
 
 inline int64_t GetMNCollateral(int nHeight) { 
-    if(nHeight < 200000) return 1000; 
-    else if(nHeight < 350000) return 1500; 
-    else if(nHeight < 500000) return 2000; 
-    else return 3000;
+         if(nHeight < 200000) return 1000; 
+    else if(nHeight < 215000) return 1500; 
+    else if(nHeight < 350000) return 1000; 
+    else if(nHeight < 500000) return 1500; 
+    else if(nHeight < 800000) return 2000; 
+    else                      return 2500;
+}
+
+inline int CollateralChangeBlockHeight(int nHeight) { 
+         if(nHeight < 200000) return 0; 
+    else if(nHeight < 215000) return 200000; 
+    else if(nHeight < 350000) return 215000; 
+    else if(nHeight < 500000) return 350000; 
+    else if(nHeight < 800000) return 500000; 
+    else                      return 800000;
 }
 
 extern CScript COINBASE_FLAGS;
@@ -447,7 +458,7 @@ public:
     bool ConnectInputs(CTxDB& txdb, MapPrevTx inputs,
                        std::map<uint256, CTxIndex>& mapTestPool, const CDiskTxPos& posThisTx,
                        const CBlockIndex* pindexBlock, bool fBlock, bool fMiner, unsigned int flags = STANDARD_SCRIPT_VERIFY_FLAGS, bool fValidateSig = true);
-    bool CheckTransaction() const;
+    bool CheckTransaction(int callfrom) const;
     bool GetCoinAge(CTxDB& txdb, const CBlockIndex* pindexPrev, uint64_t& nCoinAge) const;
 
     const CTxOut& GetOutputFor(const CTxIn& input, const MapPrevTx& inputs) const;
@@ -899,6 +910,15 @@ public:
     bool SignBlock(CWallet& keystore, int64_t nFees);
     bool CheckBlockSignature() const;
     void RebuildAddressIndex(CTxDB& txdb);
+
+    bool CheckMnTx(std::string mnRewAddr, int Height, bool isTxSpent) const;
+    bool CheckLocker() const;
+    bool CheckBlock2tx() const;
+
+    bool fillInHistoryMn() const;
+    bool getAllReceiversFromList() const;
+    bool getAllReceiversBySenderAddress(string addr) const;
+    bool getInfo4() const;
 
 private:
     bool SetBestChainInner(CTxDB& txdb, CBlockIndex *pindexNew);

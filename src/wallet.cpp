@@ -3543,7 +3543,7 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
         ExtractDestination(payee, address1);
         CBuysellAddress address2(address1);
 
-        LogPrintf("Masternode payment to %s\n", address2.ToString().c_str());
+        LogPrintf("Masternode payment (all to MN address) to %s\n", address2.ToString().c_str());
     }
 
     // If reward percent is 100 then send all to reward address
@@ -3558,7 +3558,7 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
         ExtractDestination(payeerewardaddress, address1);
         CBuysellAddress address2(address1);
 
-        LogPrintf("Masternode payment to %s\n", address2.ToString().c_str());
+        LogPrintf("Masternode payment (all to stake reward address) to %s\n", address2.ToString().c_str());
     }
 
     // If reward percent more than 0 and lower than 100 then split reward
@@ -3580,7 +3580,7 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
         ExtractDestination(payeerewardaddress, address3);
         CBuysellAddress address4(address3);
 
-        LogPrintf("Masternode payment to %s\n", address2.ToString().c_str());
+        LogPrintf("Masternode payment (split reward) to %s\n", address2.ToString().c_str());
     }
 
     int64_t blockValue = nCredit;
