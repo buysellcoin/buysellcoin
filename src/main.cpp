@@ -4255,7 +4255,11 @@ bool CBlock::SignBlock(CWallet& wallet, int64_t nFees)
 
     int64_t nSearchTime = txCoinStake.nTime; // search to current time
 
-    if (nSearchTime > nLastCoinStakeSearchTime)
+    LogPrintf("\nSignBlock: nSearchTime = %d  or %s\n",nSearchTime, DateTimeStrFormat("%x %H:%M:%S", nSearchTime));
+    LogPrintf("SignBlock: nLastCoinStakeSearchTime = %d  or %s\n should be less then previous\n",nLastCoinStakeSearchTime, DateTimeStrFormat("%x %H:%M:%S", nLastCoinStakeSearchTime));
+
+
+    if (true /*nSearchTime > nLastCoinStakeSearchTime*/)
     {
         int64_t nSearchInterval = 1;
         if (wallet.CreateCoinStake(wallet, nBits, nSearchInterval, nFees, txCoinStake, key))
