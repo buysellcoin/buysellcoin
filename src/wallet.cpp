@@ -3340,6 +3340,8 @@ uint64_t CWallet::GetStakeWeight() const
 
 bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int64_t nSearchInterval, int64_t nFees, CTransaction& txNew, CKey& key)
 {
+    LogPrintf("CreateCoinStake:\n");
+
     CBlockIndex* pindexPrev = pindexBest;
     CBigNum bnTargetPerCoinDay;
     bnTargetPerCoinDay.SetCompact(nBits);
@@ -3355,8 +3357,10 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
     // Choose coins to use
     int64_t nBalance = GetBalance();
 
-    if (nBalance <= nReserveBalance)
+    if (nBalance <= nReserveBalance){
+        LogPrintf("CreateCoinStake: FALSE ---- 1 ----\n");
         return false;
+    }
 
     vector<const CWalletTx*> vwtxPrev;
 
@@ -3364,11 +3368,15 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
     int64_t nValueIn = 0;
 
     // Select coins with suitable depth
-    if (!SelectCoinsForStaking(nBalance - nReserveBalance, txNew.nTime, setCoins, nValueIn))
+    if (!SelectCoinsForStaking(nBalance - nReserveBalance, txNew.nTime, setCoins, nValueIn)){
+        LogPrintf("CreateCoinStake: FALSE ---- 2 ----\n");
         return false;
+    }
 
-    if (setCoins.empty())
+    if (setCoins.empty()){
+        LogPrintf("CreateCoinStake: FALSE ---- 3 ----\n");
         return false;
+    }
 
     int64_t nCredit = 0;
     CScript scriptPubKeyKernel;
@@ -3449,8 +3457,10 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
             break; // if kernel is found stop searching
     }
 
-    if (nCredit == 0 || nCredit > nBalance - nReserveBalance)
+    if (nCredit == 0 || nCredit > nBalance - nReserveBalance){
+        LogPrintf("CreateCoinStake: FALSE ---- 4 ----\n");
         return false;
+    }
 
     BOOST_FOREACH(PAIRTYPE(const CWalletTx*, unsigned int) pcoin, setCoins)
     {
@@ -3492,8 +3502,10 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
             return error("CreateCoinStake : failed to calculate coin age");
 
         nReward = GetProofOfStakeReward(pindexPrev, nCoinAge, nFees);
-        if (nReward <= 0)
+        if (nReward <= 0){
+            LogPrintf("CreateCoinStake: FALSE ---- 5 ----\n");
             return false;
+        }
 
         nCredit += nReward;
     }
@@ -3631,6 +3643,9 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
     // Successfully generated coinstake
     return true;
 }
+
+
+
 
 
 // Call after CreateTransaction unless you want to abort
