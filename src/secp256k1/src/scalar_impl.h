@@ -7,6 +7,14 @@
 #ifndef _SECP256K1_SCALAR_IMPL_H_
 #define _SECP256K1_SCALAR_IMPL_H_
 
+
+
+#define USE_SCALAR_INV_BUILTIN 1
+//   my code
+
+
+
+
 #include <string.h>
 
 #include "group.h"

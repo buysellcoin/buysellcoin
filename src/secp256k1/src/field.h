@@ -7,6 +7,14 @@
 #ifndef _SECP256K1_FIELD_
 #define _SECP256K1_FIELD_
 
+
+
+#define USE_FIELD_10X26 1
+//   my code
+
+
+
+
 /** Field element module.
  *
  *  Field elements can be represented in several ways, but code accessing

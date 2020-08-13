@@ -7,6 +7,14 @@
 #ifndef _SECP256K1_NUM_IMPL_H_
 #define _SECP256K1_NUM_IMPL_H_
 
+
+
+#define USE_NUM_NONE 1
+//   my code
+
+
+
+
 #if defined HAVE_CONFIG_H
 #include "libsecp256k1-config.h"
 #endif

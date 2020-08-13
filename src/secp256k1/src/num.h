@@ -16,7 +16,7 @@
 #if defined(USE_NUM_GMP)
 #include "num_gmp.h"
 #else
-#error "Please select num implementation"
+#error "Please select GGGGG num implementation"
 #endif
 
 /** Copy a number. */

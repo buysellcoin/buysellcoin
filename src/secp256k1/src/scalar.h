@@ -7,6 +7,12 @@
 #ifndef _SECP256K1_SCALAR_
 #define _SECP256K1_SCALAR_
 
+
+
+#define USE_SCALAR_8X32 1
+//   my code
+
+
 #include "num.h"
 
 #if defined HAVE_CONFIG_H

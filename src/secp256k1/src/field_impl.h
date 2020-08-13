@@ -7,6 +7,13 @@
 #ifndef _SECP256K1_FIELD_IMPL_H_
 #define _SECP256K1_FIELD_IMPL_H_
 
+
+
+#define USE_FIELD_10X26 1
+#define USE_FIELD_INV_BUILTIN 1
+//   my code
+
+
 #if defined HAVE_CONFIG_H
 #include "libsecp256k1-config.h"
 #endif
