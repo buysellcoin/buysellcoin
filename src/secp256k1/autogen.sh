@@ -1,3 +1,3 @@
 #!/bin/sh
 set -e
-autoreconf -if --warnings=all
+/usr/local/bin/autoreconf -if --warnings=all

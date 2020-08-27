@@ -1,7 +1,21 @@
 TEMPLATE = app
 TARGET = Buysell-qt
 VERSION = 1.0.0.1
-INCLUDEPATH += src src/json src/qt src/qt/plugins/mrichtexteditor src/secp256k1 src/secp256k1/include src/secp256k1/src usr/local/lib
+INCLUDEPATH += src src/json src/qt src/qt/plugins/mrichtexteditor src/leveldb src/leveldb/port usr/include src/secp256k1 src/secp256k1/include src/secp256k1/src usr/local/lib opt/local/bin Library/Developer/CommandLineTools/usr/include opt/local/var/macports/sources/rsync.macports.org/macports/release/tarballs/base/vendor/tcl8.5.19/compat
+INCLUDEPATH += "/usr/local/ssl/include"
+INCLUDEPATH += "/usr/local/ssl/include/openssl"
+INCLUDEPATH += "/opt/local/include/db48"
+INCLUDEPATH += "/opt/local/bin"
+INCLUDEPATH += "/Users/dns/github/buysellcoin/src/secp256k1"
+INCLUDEPATH += "/Users/dns/github/buysellcoin/src/secp256k1/include"
+INCLUDEPATH += "/Users/dns/github/buysellcoin/src/secp256k1/src"
+#INCLUDEPATH += "/opt/local/include/boost"
+INCLUDEPATH += "/opt/local/include"
+INCLUDEPATH += "/Users/dns/boost_1_58_0"
+INCLUDEPATH += "/usr/local/ssl/include"
+
+
+
 QT += network printsupport
 DEFINES += ENABLE_WALLET
 DEFINES += BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE
@@ -15,6 +29,7 @@ greaterThan(QT_MAJOR_VERSION, 4) {
     QT += widgets
     DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0
 }
+
 
 # for boost 1.37, add -mt to the boost libraries
 # use: qmake BOOST_LIB_SUFFIX=-mt
@@ -48,10 +63,10 @@ UI_DIR = build
 # use: qmake "RELEASE=1"
 contains(RELEASE, 1) {
     # Mac: compile for maximum compatibility (10.5, 32-bit)
-    macx:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk
-    macx:QMAKE_CFLAGS += -mmacosx-version-min=10.7 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk
-    macx:QMAKE_LFLAGS += -mmacosx-version-min=10.7 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk
-    macx:QMAKE_OBJECTIVE_CFLAGS += -mmacosx-version-min=10.7 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk
+    macx:QMAKE_CXXFLAGS += -mmacosx-version-min=10.7 -isysroot /Library/Developer/CommandLineTools/usr/include/c++
+    macx:QMAKE_CFLAGS += -mmacosx-version-min=10.7 -isysroot /Library/Developer/CommandLineTools/usr/include/c++
+    macx:QMAKE_LFLAGS += -mmacosx-version-min=10.7 -isysroot /Library/Developer/CommandLineTools/usr/include/c++
+
 
 
     !windows:!macx {
@@ -104,7 +119,75 @@ contains(BITCOIN_NEED_QT_PLUGINS, 1) {
 #Build Leveldb
 INCLUDEPATH += src/leveldb/include src/leveldb/helpers
 LIBS += $$PWD/src/leveldb/libleveldb.a $$PWD/src/leveldb/libmemenv.a
-SOURCES += src/txdb-leveldb.cpp
+SOURCES += src/txdb-leveldb.cpp \
+    src/leveldb/db/autocompact_test.cc \
+    src/leveldb/db/builder.cc \
+    src/leveldb/db/c.cc \
+    src/leveldb/db/c_test.c \
+    src/leveldb/db/corruption_test.cc \
+    src/leveldb/db/db_bench.cc \
+    src/leveldb/db/db_impl.cc \
+    src/leveldb/db/db_iter.cc \
+    src/leveldb/db/db_test.cc \
+    src/leveldb/db/dbformat.cc \
+    src/leveldb/db/dbformat_test.cc \
+    src/leveldb/db/filename.cc \
+    src/leveldb/db/filename_test.cc \
+    src/leveldb/db/leveldb_main.cc \
+    src/leveldb/db/log_reader.cc \
+    src/leveldb/db/log_test.cc \
+    src/leveldb/db/log_writer.cc \
+    src/leveldb/db/memtable.cc \
+    src/leveldb/db/repair.cc \
+    src/leveldb/db/skiplist_test.cc \
+    src/leveldb/db/table_cache.cc \
+    src/leveldb/db/version_edit.cc \
+    src/leveldb/db/version_edit_test.cc \
+    src/leveldb/db/version_set.cc \
+    src/leveldb/db/version_set_test.cc \
+    src/leveldb/db/write_batch.cc \
+    src/leveldb/db/write_batch_test.cc \
+    src/leveldb/doc/bench/db_bench_sqlite3.cc \
+    src/leveldb/doc/bench/db_bench_tree_db.cc \
+    src/leveldb/helpers/memenv/memenv.cc \
+    src/leveldb/helpers/memenv/memenv_test.cc \
+    src/leveldb/issues/issue178_test.cc \
+    src/leveldb/issues/issue200_test.cc \
+    src/leveldb/port/port_posix.cc \
+    src/leveldb/table/block.cc \
+    src/leveldb/table/block_builder.cc \
+    src/leveldb/table/filter_block.cc \
+    src/leveldb/table/filter_block_test.cc \
+    src/leveldb/table/format.cc \
+    src/leveldb/table/iterator.cc \
+    src/leveldb/table/merger.cc \
+    src/leveldb/table/table.cc \
+    src/leveldb/table/table_builder.cc \
+    src/leveldb/table/table_test.cc \
+    src/leveldb/table/two_level_iterator.cc \
+    src/leveldb/util/arena.cc \
+    src/leveldb/util/arena_test.cc \
+    src/leveldb/util/bloom.cc \
+    src/leveldb/util/bloom_test.cc \
+    src/leveldb/util/cache.cc \
+    src/leveldb/util/cache_test.cc \
+    src/leveldb/util/coding.cc \
+    src/leveldb/util/coding_test.cc \
+    src/leveldb/util/comparator.cc \
+    src/leveldb/util/crc32c.cc \
+    src/leveldb/util/crc32c_test.cc \
+    src/leveldb/util/env.cc \
+    src/leveldb/util/env_posix.cc \
+    src/leveldb/util/env_test.cc \
+    src/leveldb/util/env_win.cc \
+    src/leveldb/util/filter_policy.cc \
+    src/leveldb/util/hash.cc \
+    src/leveldb/util/histogram.cc \
+    src/leveldb/util/logging.cc \
+    src/leveldb/util/options.cc \
+    src/leveldb/util/status.cc \
+    src/leveldb/util/testharness.cc \
+    src/leveldb/util/testutil.cc
 !win32 {
     # we use QMAKE_CXXFLAGS_RELEASE even without RELEASE=1 because we use RELEASE to indicate linking preferences not -O preferences
     genleveldb.commands = cd $$PWD/src/leveldb && CC=$$QMAKE_CC CXX=$$QMAKE_CXX $(MAKE) OPT=\"$$QMAKE_CXXFLAGS $$QMAKE_CXXFLAGS_RELEASE\" libleveldb.a libmemenv.a
@@ -188,6 +271,60 @@ macx:QMAKE_CXXFLAGS_WARN_ON += -Wno-deprecated-declarations
 # Input
 DEPENDPATH += src src/json src/qt
 HEADERS += src/qt/bitcoingui.h \
+    src/leveldb/db/builder.h \
+    src/leveldb/db/db_impl.h \
+    src/leveldb/db/db_iter.h \
+    src/leveldb/db/dbformat.h \
+    src/leveldb/db/filename.h \
+    src/leveldb/db/log_format.h \
+    src/leveldb/db/log_reader.h \
+    src/leveldb/db/log_writer.h \
+    src/leveldb/db/memtable.h \
+    src/leveldb/db/skiplist.h \
+    src/leveldb/db/snapshot.h \
+    src/leveldb/db/table_cache.h \
+    src/leveldb/db/version_edit.h \
+    src/leveldb/db/version_set.h \
+    src/leveldb/db/write_batch_internal.h \
+    src/leveldb/helpers/memenv/memenv.h \
+    src/leveldb/include/leveldb/c.h \
+    src/leveldb/include/leveldb/cache.h \
+    src/leveldb/include/leveldb/comparator.h \
+    src/leveldb/include/leveldb/db.h \
+    src/leveldb/include/leveldb/env.h \
+    src/leveldb/include/leveldb/filter_policy.h \
+    src/leveldb/include/leveldb/iterator.h \
+    src/leveldb/include/leveldb/options.h \
+    src/leveldb/include/leveldb/slice.h \
+    src/leveldb/include/leveldb/status.h \
+    src/leveldb/include/leveldb/table.h \
+    src/leveldb/include/leveldb/table_builder.h \
+    src/leveldb/include/leveldb/write_batch.h \
+    src/leveldb/port/atomic_pointer.h \
+    src/leveldb/port/port.h \
+    src/leveldb/port/port_example.h \
+    src/leveldb/port/port_posix.h \
+    src/leveldb/port/port_win--0.h \
+    src/leveldb/port/thread_annotations.h \
+    src/leveldb/port/win/stdint.h \
+    src/leveldb/table/block.h \
+    src/leveldb/table/block_builder.h \
+    src/leveldb/table/filter_block.h \
+    src/leveldb/table/format.h \
+    src/leveldb/table/iterator_wrapper.h \
+    src/leveldb/table/merger.h \
+    src/leveldb/table/two_level_iterator.h \
+    src/leveldb/util/arena.h \
+    src/leveldb/util/coding.h \
+    src/leveldb/util/crc32c.h \
+    src/leveldb/util/hash.h \
+    src/leveldb/util/histogram.h \
+    src/leveldb/util/logging.h \
+    src/leveldb/util/mutexlock.h \
+    src/leveldb/util/posix_logger.h \
+    src/leveldb/util/random.h \
+    src/leveldb/util/testharness.h \
+    src/leveldb/util/testutil.h \
     src/qt/transactiontablemodel.h \
     src/qt/addresstablemodel.h \
     src/qt/bantablemodel.h \
@@ -511,12 +648,12 @@ isEmpty(BDB_INCLUDE_PATH) {
 }
 
 isEmpty(BOOST_LIB_PATH) {
-    macx:BOOST_LIB_PATH = /usr/local/Cellar/boost/1.59.0/lib
+    macx:BOOST_LIB_PATH = /Users/dns/boost_1_58_0/boost
     windows:BOOST_LIB_PATH=C:/dev/coindeps32/boost_1_57_0/lib
 }
 
 isEmpty(BOOST_INCLUDE_PATH) {
-    macx:BOOST_INCLUDE_PATH = /usr/local/Cellar/boost/1.59.0/include
+    macx:BOOST_INCLUDE_PATH = /Users/dns/boost_1_58_0
     windows:BOOST_INCLUDE_PATH=C:/dev/coindeps32/boost_1_57_0/include
 }
 
@@ -543,12 +680,12 @@ isEmpty(MINIUPNPC_LIB_PATH) {
 }
 
 isEmpty(OPENSSL_INCLUDE_PATH) {
-    macx:OPENSSL_INCLUDE_PATH = /usr/local/openssl-1.0.1p/include
+    macx:OPENSSL_INCLUDE_PATH = /usr/local/ssl/include
     windows:OPENSSL_INCLUDE_PATH=C:/dev/coindeps32/openssl-1.0.1p/include
 }
 
 isEmpty(OPENSSL_LIB_PATH) {
-    macx:OPENSSL_LIB_PATH = /usr/local/openssl-1.0.1p/lib
+    macx:OPENSSL_LIB_PATH = /usr/local/ssl/include/openssl
     windows:OPENSSL_LIB_PATH=C:/dev/coindeps32/openssl-1.0.1p/lib
 }
 
@@ -587,8 +724,8 @@ macx:HEADERS += src/qt/macdockiconhandler.h src/qt/macnotificationhandler.h
 macx:OBJECTIVE_SOURCES += src/qt/macdockiconhandler.mm src/qt/macnotificationhandler.mm
 macx:LIBS += -framework Foundation -framework ApplicationServices -framework AppKit -framework CoreServices
 macx:DEFINES += MAC_OSX MSG_NOSIGNAL=0
-macx:ICON = src/qt/res/icons/Beetle.icns
-macx:TARGET = "Beetle-Qt"
+macx:ICON = src/qt/res/icons/Buysell.icns
+macx:TARGET = "Buysell-Qt"
 macx:QMAKE_CFLAGS_THREAD += -pthread
 macx:QMAKE_LFLAGS_THREAD += -pthread
 macx:QMAKE_CXXFLAGS_THREAD += -pthread
@@ -622,3 +759,20 @@ contains(RELEASE, 1) {
 }
 
 system($$QMAKE_LRELEASE -silent $$_PRO_FILE_)
+
+DISTFILES += \
+    src/leveldb/AUTHORS \
+    src/leveldb/LICENSE \
+    src/leveldb/NEWS \
+    src/leveldb/README \
+    src/leveldb/TODO \
+    src/leveldb/WINDOWS.md \
+    src/leveldb/build_config.mk \
+    src/leveldb/build_detect_platform \
+    src/leveldb/doc/benchmark.html \
+    src/leveldb/doc/doc.css \
+    src/leveldb/doc/impl.html \
+    src/leveldb/doc/index.html \
+    src/leveldb/doc/log_format.txt \
+    src/leveldb/doc/table_format.txt \
+    src/leveldb/port/README

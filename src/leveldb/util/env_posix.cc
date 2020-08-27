@@ -7,6 +7,9 @@
 #include <set>
 #include <dirent.h>
 #include <errno.h>
+
+#include "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include/errno.h"
+
 #include <fcntl.h>
 #include <pthread.h>
 #include <stdio.h>
@@ -24,6 +27,7 @@
 #include "leveldb/env.h"
 #include "leveldb/slice.h"
 #include "port/port.h"
+#include "port/port_posix.h"
 #include "util/logging.h"
 #include "util/mutexlock.h"
 #include "util/posix_logger.h"

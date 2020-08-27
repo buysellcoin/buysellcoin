@@ -38,7 +38,8 @@
   #include <endian.h>
   #define PLATFORM_IS_LITTLE_ENDIAN  (_BYTE_ORDER == _LITTLE_ENDIAN)
 #else
-  #include <endian.h>
+  //#include <endian.h>
+  #include "/Library/Developer/CommandLineTools/SDKs/MacOSX10.15.sdk/usr/include/machine/endian.h"
 #endif
 
 #include <pthread.h>
@@ -48,6 +49,8 @@
 #include <stdint.h>
 #include <string>
 #include "port/atomic_pointer.h"
+
+#include "/Users/dns/Qt/5.15.0/Src/qtbase/src/3rdparty/angle/src/common/third_party/smhasher/src/PMurHash.cpp"
 
 #ifndef PLATFORM_IS_LITTLE_ENDIAN
 #define PLATFORM_IS_LITTLE_ENDIAN (__BYTE_ORDER == __LITTLE_ENDIAN)
@@ -77,6 +80,13 @@
 // when targetting older platforms.
 #define fdatasync fsync
 #endif
+
+
+#define fread_unlocked fread
+#define fwrite_unlocked fwrite
+#define fflush_unlocked fflush
+#define fdatasync(fd) fcntl(fd, F_FULLFSYNC, 0)
+
 
 namespace leveldb {
 namespace port {

@@ -6,5 +6,5 @@
 cd src/leveldb
 make libleveldb.a libmemenv.a
 cd ..
-make -f makefile.unix
+make -f makefile.osx
 strip buyselld

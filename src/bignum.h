@@ -10,7 +10,9 @@
 #include "uint256.h"
 #include "version.h"
 
-#include <openssl/bn.h>
+#include "/usr/local/ssl/include/openssl/bn.h"
+#include "/usr/local/ssl/include/openssl/asn1.h"
+#include "/usr/local/ssl/include/openssl/asn1t.h"
 
 #include <stdexcept>
 #include <vector>

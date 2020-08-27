@@ -38,6 +38,8 @@ git clone git@github.com:rat4/Buysell.git Buysell
 
 sudo port install boost db48 openssl miniupnpc
 
+(install cmake autoconf automake doxygen libtool llvm@4)
+
 Optionally install qrencode (and set USE_QRCODE=1):
 sudo port install qrencode
 
