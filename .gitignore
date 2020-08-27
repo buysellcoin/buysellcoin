@@ -1,0 +1,10 @@
+
+*.user
+
+.DS_Store
+
+*.sh
+
+src/leveldb/build_detect_platform
+
+src/qt/
