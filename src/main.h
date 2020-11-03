@@ -83,19 +83,13 @@ static const unsigned char REJECT_INVALID = 0x10;
 inline int64_t GetMNCollateral(int nHeight) { 
          if(nHeight < 200000) return 1000; 
     else if(nHeight < 215000) return 1500; 
-    else if(nHeight < 350000) return 1000; 
-    else if(nHeight < 500000) return 1500; 
-    else if(nHeight < 800000) return 2000; 
-    else                      return 2500;
+    else                      return 1000;
 }
 
 inline int CollateralChangeBlockHeight(int nHeight) { 
          if(nHeight < 200000) return 0; 
     else if(nHeight < 215000) return 200000; 
-    else if(nHeight < 350000) return 215000; 
-    else if(nHeight < 500000) return 350000; 
-    else if(nHeight < 800000) return 500000; 
-    else                      return 800000;
+    else                      return 215000;
 }
 
 extern CScript COINBASE_FLAGS;

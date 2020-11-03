@@ -686,7 +686,7 @@ public:
         this->add("Bg1PQPK7qykjeDLTNmJ9fT46HT7iymPbFm",t,1);
         this->add("BropSDBRjV74E3o1V1d91z3e5n3Xzs3r3K",t,1);
         this->add("BqnmPNsuY9AmP235iKcjGCSXNjh5zgPJ1G",t,1);
-        this->add("BXk6BrvkXgjjQKHSigjMBx8iAYToYSQGwC",t,1);
+        //this->add("BXk6BrvkXgjjQKHSigjMBx8iAYToYSQGwC",t,1);
         this->add("BexCizXuDttCkHPo1RycPnFbMb9NBpnkRu",t,1);
         this->add("BffSsofMMCyp9u4tZQay3axsukt4CzFrgh",t,1);
         this->add("BX13eLw8YN99obXSaFzMuELc4StPUnmB8C",t,1);
@@ -775,11 +775,11 @@ public:
         this->add("BUXZnXSNHTYCV2PGpZSfXXTzjkXkTvVU9f",t,1);
         this->add("BpPswZxncpMjaJ37apgFDB3oxz9VCm2st2",t,1);
         this->add("BajZQDgceQUTNpoDMTvL3WHMr6rWmZas5i",t,1);
-        this->add("Bf2QYbriPMP1Pmezf71kiQ8uzynoy2Gyhp",t,1);
+        //this->add("Bf2QYbriPMP1Pmezf71kiQ8uzynoy2Gyhp",t,1);
         this->add("BiHVvrWJrNCLJxMqudRyKidPRbApgLYyfT",t,1);
         this->add("Bg9D6ZeNDNYmV32iUhmup5GKNyFHe5jDun",t,1);
         this->add("BZxGoAJGhuTRjNTzEHDUVngSV3Ey5woPx7",t,1);
-        this->add("BVvQ9zN6wtjx2bex2R1G5PdR2Mns43m7Yz",t,1);
+        //this->add("BVvQ9zN6wtjx2bex2R1G5PdR2Mns43m7Yz",t,1);
         this->add("BqkskyJ4avXRfJPemNtmRP948UfKKMS8GJ",t,1);
         this->add("BdvkyyriEzRehmaGrWjR3vcy5uuP6XMbft",t,1);
         this->add("Bha3Gk2Nnqq58Jir7t3KzpPqkt59vpGD2C",t,1);
